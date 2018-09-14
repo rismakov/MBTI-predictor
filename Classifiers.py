@@ -35,8 +35,8 @@ class Classifiers(object):
                 self.classifier_names.append(''.join([letter for letter in clf.__class__.__name__ 
                                              if letter in CAPITAL_LETTERS]))
 
-        self._X_train, self._X_test, self._y_train, self._y_test = train_test_split(X, y, 
-                test_size=0.30, random_state=18)
+        self._X_train, self._X_test, self._y_train, self._y_test = train_test_split(
+            X, y, test_size=0.30, random_state=18)
 
     def train(self, save_model=False):
         for clf, name in izip(self.classifiers, self.classifier_names):
@@ -103,8 +103,6 @@ class Classifiers(object):
             cross_val_metrics = cross_validate(clf, self._X_train, self._y_train, scoring=scoring)
 
             # get mean of all cross val results
-            mean_cross_val_metrics[name] = {k: np.mean(v) for k, v in cross_val_metrics.iteritems() 
-                    if 'test' in k}
+            mean_cross_val_metrics[name] = {k: np.mean(v) for k, v in cross_val_metrics.iteritems() if 'test' in k}
 
         print_results_in_table(mean_cross_val_metrics, self.classifiers, self.classifier_names)
-        
