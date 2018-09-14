@@ -19,7 +19,7 @@ color_mappings = {
     'P': 'chocolate'
 }    
 
-xaxis_mappings = {
+type_mappings = {
     'EN': 'Extraversion-Intuition',
     'ES': 'Extraversion-Sensing',
     'IN': 'Introversion-Intuition',
@@ -32,8 +32,8 @@ xaxis_mappings = {
     'F': 'Feeling',
     'J': 'Judging',
     'P': 'Perceiving'
-
 }
+
 
 def label_fig_xaxis_names(names, width=0):
     x_range = np.arange(len(names))
@@ -54,28 +54,85 @@ def errorbar_graph_of_mean_feature_values(means, errs, xaxis_names, feature):
     label_fig_xaxis_names(xaxis_names)
 
 
-def group_and_plot_by_type(data, group_by_col, feature):
+def is_statistically_significant(lower_bounds, upper_bounds, letter_1, letter_2):
+    return (
+        (lower_bounds[letter_1] > upper_bounds[letter_2]) or 
+        (lower_bounds[letter_2] > upper_bounds[letter_1])
+    )
+
+
+def extract_lower_and_upper_bounds(data, group_by_col, feature):
     means = data.groupby(group_by_col).mean()
     sems = data.groupby(group_by_col).sem()
 
-    plt.style.use('fivethirtyeight')
     feature_means = means[feature]
     feature_sems = sems[feature]
 
-    if len(group_by_col) == 2:
-        lower_bounds = feature_means - feature_sems
-        upper_bounds = feature_means + feature_sems
-        
+    lower_bounds = feature_means - feature_sems
+    upper_bounds = feature_means + feature_sems
+
+    return feature_means, feature_sems, lower_bounds, upper_bounds
+
+
+def group_and_plot_by_type(data, group_by_col, feature, i):
+    feature_means, feature_sems, lower_bounds, upper_bounds = extract_lower_and_upper_bounds(
+        data, group_by_col, feature)
+
+    plt.style.use('fivethirtyeight')
+    if len(group_by_col) == 2:        
         letter_1 = group_by_col[0]
         letter_2 = group_by_col[-1]
         # only plot if difference is statistically significant
-        if ((lower_bounds[letter_1] > upper_bounds[letter_2]) or
-            (lower_bounds[letter_2] > upper_bounds[letter_1])):
-
+        if is_statistically_significant(lower_bounds, upper_bounds, letter_1, letter_2):
             plt.subplot(2, 2, i+1)
             errorbar_graph_of_mean_feature_values(feature_means, feature_sems, feature_sems.index, feature)
     else:
         errorbar_graph_of_mean_feature_values(feature_means, feature_sems, feature_sems.index, feature)        
+
+
+def plot_all_graphs(data, features, letter_types):
+    '''Plots errorbar graphs for all types and plots errorbar graphs for all types separated by letter-type in 4 subplot 
+    figures. Only plots subplot if results are statistically significant.
+    '''
+    for feature in features:
+        plt.figure()
+        plt.title(feature)
+        for i, letter_type in enumerate(letter_types):
+            group_and_plot_by_type(data, letter_type, feature, i)
+
+        filename_to_save = '../MBTI_project/plots/' + feature
+        plt.savefig(filename_to_save, facecolor='whitesmoke')
+        plt.close()
+
+        group_and_plot_by_type(data, 'type', feature)
+        filename_to_save = '../MBTI_project/plots/' + feature + '_all'
+        plt.savefig(filename_to_save, facecolor='whitesmoke')
+        plt.close()    
+
+
+def print_info(data, letter_types, features):
+    for i, letter_type in enumerate(letter_types):
+        letter_type_results = {}
+        
+        higher_key = '{}_higher'
+        for i in xrange(2):
+            letter_type_results[higher_key.format(letter_type[i])] = []
+        
+        for feature in features:
+            lower_bounds, upper_bounds = extract_lower_and_upper_bounds(data, letter_type, feature)
+
+            letter_1, letter_2 = (letter_type[0], letter_type[1])
+            if is_statistically_significant(lower_bounds, upper_bounds, letter_1, letter_2):
+                max_ind = lower_bounds[lower_bounds == lower_bounds.max()].index
+                letter_type_results[higher_key.format(max_ind[0])].append(feature)
+
+        for i in xrange(2):
+            letter = letter_type[i]
+            print('The following features are higher in {} type'.format(type_mappings[letter]))
+            for feature in letter_type_results[higher_key.format(letter)]:
+                print(feature)
+            print()
+
 
 if __name__ == "__main__":
     path = '../MBTI_project/featurized_mbti'
@@ -85,6 +142,7 @@ if __name__ == "__main__":
     for field_to_remove in ['Unnamed: 0', 'type', 'posts']:
         features.remove(field_to_remove)
 
+    print('Features:')
     print(features)
 
     data['EI'] = [mbti_type[0] for mbti_type in data['type']]
@@ -97,19 +155,6 @@ if __name__ == "__main__":
     
     letter_types = ['EI', 'NS', 'FT', 'JP']
 
-    for feature in features:
-        plt.figure()
-        plt.title(feature)
-        for i, letter_type in enumerate(letter_types):
-            group_and_plot_by_type(data, letter_type, feature)
+    plot_all_graphs(data, features, letter_types)
 
-        filename_to_save = '../MBTI_project/plots/' + feature
-        plt.savefig(filename_to_save, facecolor='whitesmoke')
-        plt.close()
-
-        group_and_plot_by_type(data, 'type', feature)
-        filename_to_save = '../MBTI_project/plots/' + feature + '_all'
-        plt.savefig(filename_to_save, facecolor='whitesmoke')
-        plt.close()
-
-
+    print_info(data, letter_types, features)
