@@ -100,59 +100,10 @@ if __name__ == "__main__":
 
     cross_validate_and_print_results(multi_clfs)
 
-    '''
-    # RUN BELOW TO TRAIN MODEL:
-    # flake8 --max-line-length 120
-
-    # XGB, ABC, RF, LR
-    params = [
-        # Neural Network:
-        # Best parameters: {'estimator__solver': 'adam', 'estimator__activation': 
-                            'identity', 'estimator__hidden_layer_sizes': (3,)}
-        # Best score: 0.246439712464
-        # {'estimator__hidden_layer_sizes': [(3, ), (7, )],  # [(3, ), (100, )], 
-        # 'estimator__activation': ['identity'],  # ['relu', 'identity', 'logistic', 'tanh'],
-        # 'estimator__solver': ['adam']  # ['adam', 'lbfgs', 'sgd'] 
-        # },
-        # XGBoost:
-        # Best parameters: {'estimator__learning_rate': 0.1, 'estimator__n_estimators': 100}
-        # Best score: 0.263800352638
-        {'estimator__learning_rate': [0.05, 0.1, 0.2],  # [0.1, 0.2, 0.5, 1.0], 
-         'estimator__n_estimators': [170, 200, 250]  # [100, 150, 200]
-         },
-        # Gradient Boosting:
-        # Best parameters: {'estimator__learning_rate': 0.1, 'estimator__n_estimators': 50}
-        # Best score: 0.246439712464
-        # {'estimator__learning_rate': [0.05, 0.1],  # [0.1, 0.2, 0.5, 1.0], 
-        # 'estimator__n_estimators': [50, 70],  # [10, 50, 100, 200]
-        # },
-        # Ada Boost:
-        # Best parameters: {'estimator__learning_rate': 0.1, 'estimator__n_estimators': 100}
-        # Best score: 0.25701885257
-        {'estimator__learning_rate': [0.05, 0.1, 0.2],  # [0.1, 0.2, 0.5, 1.0], 
-         'estimator__n_estimators': [100, 150, 200]  # [10, 50, 100, 200]
-         },
-        # Random Forest:
-        # Best parameters: {'estimator__min_samples_split': 2, 'estimator__max_depth': None, 
-                            'estimator__criterion': 'gini', 'estimator__n_estimators': 100}
-        # Best score: 0.258510782585
-        {'estimator__n_estimators': [100, 150, 200],  # [10, 50, 100], 
-         'estimator__criterion': ['gini', 'entropy']  # ['gini', 'entropy'], 
-         # 'estimator__max_depth': [None, 5, 10], 
-         # 'estimator__min_samples_split': [2, 0.3]
-         },
-        # LR:
-        {
-        'estimator__penalty': ['l1', 'l2'],
-        'estimator__class_weight': [None, 'weighted']
-        }
-
-    ]
-
-    # mbti_model.train(save_model=True)
+    mbti_model.train(save_model=True)
     # mbti_model.grid_search(params)
     
     # mbti_model.train()
     # mbti_model.test()
     # mbti_model.plot_roc_curve()
-    '''
+

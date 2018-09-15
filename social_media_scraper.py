@@ -12,11 +12,6 @@ from selenium.webdriver.common.keys import Keys
 from stylometry_analysis import StyleFeatures
 
 
-def get_soup(url):
-    r = requests.get(url)
-    return BeautifulSoup(r.text, 'html.parser')
-
-
 def get_posts(code_section, klass):
     return code_section.find_all(class_=klass)
 
@@ -31,11 +26,7 @@ def get_featurized_posts(posts_list):
 
     posts = '|||'.join(posts_list)
 
-    # print(get_posts(soup, klass))
-    print(len(posts_list))
-
     stylometry = StyleFeatures(posts)
-    # print(stylometry)
     return stylometry
 
 

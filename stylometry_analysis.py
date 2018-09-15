@@ -23,6 +23,7 @@ invalid_urls = [
     'http', "'http", 'ame=http', 'school.http'
 ]
 
+
 class StyleFeatures(dict):
     '''
     Retrieves features of writing style
@@ -82,10 +83,6 @@ class StyleFeatures(dict):
 
         pos_tags = textblob_comments_w_periods.pos_tags
 
-        # pos_tags_tags = [tag for word, tag in pos_tags]
-        # pos_tags_counter = Counter(pos_tags_tags)
-        # print(pos_tags_counter)
-
         keys = [
             'freq_adjs', 'freq_interjections', 'freq_proper_nouns', 'freq_nouns', 
             'freq_personal_pronouns', 'freq_prepositions', 'freq_determiners', 'freq_adverbs', 'freq_verbs'
@@ -134,7 +131,7 @@ class StyleFeatures(dict):
             'freq_kindness': [non_link_words, ['kindness', 'kind'], non_link_words],
             'freq_party': [non_link_words, ['party'], non_link_words],
             'freq_logic': [non_link_words, ['logic'], non_link_words],
-            'freq_spiritual': [non_link_words, ['spiritual', 'spirituality'], non_link_words],
+            'freq_spiritual': [non_link_words, ['spiritual', 'spirituality'], non_link_words]
         }
 
         for item, params in freq_items.items():
@@ -142,7 +139,6 @@ class StyleFeatures(dict):
 
         for item, params in freq_items_per_thousand.items():
             self[item] = self.find_freq(params[0], params[1], params[2]) * 1000
-
 
         # TO DO: separate images from links
         # imgur, png, jpg, photobucket
