@@ -48,4 +48,4 @@ def print_results_in_table(metrics, clfs, clf_names):
     fig.savefig('table', dpi=100)
     plt.show()
     print('Closing figure.')
-    fig.close()
+    plt.close()
