@@ -19,7 +19,7 @@ from xgboost import XGBClassifier
 from baseline_clf import BaselineClassifier, MajorityBaselineClassifier
 from stylometry_analysis import StyleFeatures
 
-path = '../MBTI_project/featurized_mbti'
+PATH = '../MBTI_project/featurized_mbti'
 
 num_partitions = 10  # number of partitions to split dataframe
 num_cores = 4  # number of cores on your machine
@@ -59,13 +59,16 @@ def featurize_data():
 
     data.drop('stylometry', axis=1, inplace=True)
     print(data.columns)
-    data.to_csv(path, encoding='utf-8')
+    data.to_csv(PATH, encoding='utf-8')
 
 
 def open_data():
-    featurized_data = pd.read_csv(path, encoding='utf-8').drop(['Unnamed: 0', 'posts'], axis=1)
+    featurized_data = pd.read_csv(PATH, encoding='utf-8').drop(['Unnamed: 0', 'posts'], axis=1)
     X = featurized_data.drop(['type', 'avg_post_len', 'mean_sentence_len', 'std_sentence_len'], axis=1)
     y = featurized_data['type']
+
+    # Because Naive Bayes doesnt accept negative values: 
+    X['polarity'] = X['polarity'] + 1
 
     return X, y
 
@@ -100,7 +103,7 @@ if __name__ == "__main__":
 
     cross_validate_and_print_results(multi_clfs)
 
-    mbti_model.train(save_model=True)
+    # mbti_model.train(save_model=True)
     # mbti_model.grid_search(params)
     
     # mbti_model.train()
