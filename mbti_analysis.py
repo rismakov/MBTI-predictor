@@ -78,7 +78,14 @@ def cross_validate_and_print_results(clfs):
 
     mbti_model = Classifiers(clfs, X, y)
     mbti_model.print_cross_val_results()
+    
 
+
+def grid_search(clfs, params):
+    X, y = open_data()
+
+    mbti_model = Classifiers(clfs, X, y)
+    mbti_model.grid_search(params)
 
 if __name__ == "__main__":
     # RUN BELOW TO FEATURIZE DATA:
@@ -101,7 +108,23 @@ if __name__ == "__main__":
     for clf in clfs:
         multi_clfs.append(OneVsRestClassifier(clf))
 
-    cross_validate_and_print_results(multi_clfs)
+    # cross_validate_and_print_results(multi_clfs)
+
+    clfs_to_grid_search = [XGBClassifier(), AdaBoostClassifier()]
+    multi_clfs_to_gs = []
+    for clf in clfs_to_grid_search:
+        multi_clfs_to_gs.append(OneVsRestClassifier(clf))
+
+    params = [
+        {'estimator__learning_rate': [0.2, 0.25, 0.3, 0.5],  # [0.05, 0.1, 0.2, 0.25] - 0.25,
+         'estimator__n_estimators': [50, 60, 70, 100]  # [70, 100, 150, 200, 300] - 70
+        },
+        {'estimator__learning_rate': [0.2, 0.25, 0.3, 0.5], # [0.05, 0.1, 0.2, 0.25] -0.25,
+         'estimator__n_estimators': [200, 250, 300, 400] # [70, 100, 150, 200, 300] - 300
+        },
+    ]
+    
+    grid_search(multi_clfs_to_gs, params)
 
     # mbti_model.train(save_model=True)
     # mbti_model.grid_search(params)

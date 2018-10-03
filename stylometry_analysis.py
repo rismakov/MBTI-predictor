@@ -6,41 +6,16 @@ from collections import Counter
 from string import punctuation
 from textblob import TextBlob
 
-mbti_types = [
-    'ENTP', 'INTP', 'ENTJ', 'INTJ', 'ENFP', 'INFP', 'ENFJ', 'INFJ',
-    'ESTP', 'ISTP', 'ESTJ', 'ISTJ', 'ESFP', 'ISFP', 'ESFJ', 'ISFJ'
-]
-
-formality_markers = ['thus', 'ergo', 'henceforth', 'hence']
-image_markers = ['img', 'photobucket', 'png', 'jpg', 'imgur', 'jpeg', 'JPG', '.php', 'image']
-swear_words = ['fuck', 'fucking', 'fucked']
-insulting_words = ['dumb', 'stupid', 'idiot', 'dipshit', 'retard', 'retarded', 'idiotic', 'dumbass']
-scientific_terms = ['science', 'scientific', 'evidence']
-
-invalid_urls = [
-    'URL=http', 'krhttp', 'accidenthttp', "'15758http", 
-    'href=http', 'bro.http', 'url=http', '68611http', 'u=http',
-    'http', "'http", 'ame=http', 'school.http'
-]
+from stylometry_constants import (
+    formality_markers, freq_items, freq_items_per_thousand, 
+    image_markers, insulting_words, invalid_urls, mbti_types, scientific_terms, swear_words
+)
 
 
 class StyleFeatures(dict):
     '''
     Retrieves features of writing style
     '''
-
-    def find_freq(self, lst, search_items, normalizer):
-        '''
-        Finds normalized frequencies of tokens.
-        Input: lst is a list of the item you are counting through,
-        search_item (list or array-like object) is the item you are counting,
-        normalizer (also list, or array-like) is the object you are normalizing it by
-        (words,sentences, or punctuation usually).
-        '''
-        cnt = 0
-        for item in search_items:
-            cnt += lst.count(item) / len(normalizer)
-        return cnt
 
     def __init__(self, posts):
         # sentences works by finding punctuation at the ends of sentences. 
@@ -100,45 +75,7 @@ class StyleFeatures(dict):
         #                                     if word != correct_word]) / self['non_link_words_len']        
         # self['freq_noun_phrases'] = len(posts_w_no_links_w_periods.noun_phrases) / self['non_link_words_len']
 
-        freq_items = {
-            'freq_question_marks': [punct, ['?'], sentences],
-            'freq_exclamation_marks': [punct, ['!'], sentences],
-            'freq_quotation_marks': [punct, ["'"], sentences]
-        }
-
-        freq_items_per_thousand = {
-            'freq_commas': [punct, [','], words],
-            'freq_semi_colons': [punct, [';'], words],
-            'freq_ands': [non_link_words, ['and'], non_link_words],
-            'freq_exclusive_words': [non_link_words, ['but', 'except'], non_link_words],
-            'freq_howevers': [non_link_words, ['however'], non_link_words],
-            'freq_ifs': [non_link_words, ['if'], non_link_words],
-            'freq_thats': [non_link_words, ['that'], non_link_words],
-            'freq_mores': [non_link_words, ['more'], non_link_words],
-            'freq_verys': [non_link_words, ['very'], non_link_words],
-            'freq_facts': [non_link_words, ['fact'], non_link_words],
-            'freq_you': [non_link_words, ['you'], non_link_words],
-            'freq_me': [non_link_words, ['I', 'me', 'mine'], non_link_words],
-            'freq_we': [non_link_words, ['us', 'we', 'our'], non_link_words],
-            'formality_level': [non_link_words, formality_markers, non_link_words],
-            'freq_swear_words': [non_link_words, swear_words, non_link_words],
-            'freq_insults': [non_link_words, insulting_words, non_link_words],
-            'freq_think': [non_link_words, ['think'], non_link_words],
-            'freq_feel': [non_link_words, ['feel'], non_link_words],
-            'freq_believe': [non_link_words, ['believe'], non_link_words],
-            'freq_know': [non_link_words, ['know'], non_link_words],
-            'freq_science': [non_link_words, scientific_terms, non_link_words],
-            'freq_kindness': [non_link_words, ['kindness', 'kind'], non_link_words],
-            'freq_party': [non_link_words, ['party'], non_link_words],
-            'freq_logic': [non_link_words, ['logic'], non_link_words],
-            'freq_spiritual': [non_link_words, ['spiritual', 'spirituality'], non_link_words]
-        }
-
-        for item, params in freq_items.items():
-            self[item] = self.find_freq(params[0], params[1], params[2])
-
-        for item, params in freq_items_per_thousand.items():
-            self[item] = self.find_freq(params[0], params[1], params[2]) * 1000
+        
 
         # TO DO: separate images from links
         # imgur, png, jpg, photobucket
@@ -194,3 +131,25 @@ class StyleFeatures(dict):
         self['mean_sentence_len'] = np.mean(sentence_lens)
         self['std_sentence_len'] = np.std(sentence_lens)
 
+    def get_freq_using_list_len(list_of_items, normalizer):
+        return (len(legit_links) / normalizer) * 1000
+
+    def get_freq_of_items_in_list(self, lst, search_items, normalizer):
+        '''
+        Finds normalized frequencies of tokens.
+        Input: lst is a list of the item you are counting through,
+        search_item (list or array-like object) is the item you are counting,
+        normalizer (also list, or array-like) is the object you are normalizing it by
+        (words,sentences, or punctuation usually).
+        '''
+        cnt = 0
+        for item in search_items:
+            cnt += lst.count(item) / len(normalizer)
+        return cnt
+
+    def get_all_freq_tokens(self, punct, sentences, words, non_link_words):
+        for item, params in freq_items.items():
+            self[item] = self.get_freq_of_items_in_list(params[0], params[1], params[2])
+
+        for item, params in freq_items_per_thousand.items():
+            self[item] = self.get_freq_of_items_in_list(params[0], params[1], params[2]) * 1000
