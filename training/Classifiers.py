@@ -49,7 +49,7 @@ class Classifiers(object):
 
     def grid_search(self, params_dict):
         for clf, params in izip(self.classifiers, params_dict):
-            print("\n____________{}____________".format(clf.__class__.__name__))
+            print("\n____________{}____________".format(clf.estimator.__class__.__name__.))
             gscv = GridSearchCV(clf, params, scoring='f1_macro')
             clf = gscv.fit(self._X_train, self._y_train)
             print('Best parameters:', clf.best_params_)
