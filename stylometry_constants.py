@@ -3,11 +3,11 @@ mbti_types = [
     'ESTP', 'ISTP', 'ESTJ', 'ISTJ', 'ESFP', 'ISFP', 'ESFJ', 'ISFJ'
 ]
 
-formality_markers = ['thus', 'ergo', 'henceforth', 'hence']
-image_markers = ['img', 'photobucket', 'png', 'jpg', 'imgur', 'jpeg', 'JPG', '.php', 'image']
-swear_words = ['fuck', 'fucking', 'fucked']
-insulting_words = ['dumb', 'stupid', 'idiot', 'dipshit', 'retard', 'retarded', 'idiotic', 'dumbass']
-scientific_terms = ['science', 'scientific', 'evidence']
+formality_markers = {'thus', 'ergo', 'henceforth', 'hence'}
+image_markers = {'img', 'photobucket', 'png', 'jpg', 'imgur', 'jpeg', 'JPG', '.php', 'image'}
+swear_words = {'fuck', 'fucking', 'fucked'}
+insulting_words = {'dumb', 'stupid', 'idiot', 'dipshit', 'retard', 'retarded', 'idiotic', 'dumbass'}
+scientific_terms = {'science', 'scientific', 'evidence'}
 
 invalid_urls = [
     'URL=http', 'krhttp', 'accidenthttp', "'15758http", 
@@ -41,10 +41,11 @@ freq_tokens_per_word = {
     'party_per_word': ['party'],
     'logic_per_word': ['logic'],
     'spiritual_per_word': ['spiritual', 'spirituality'],
-    'left_terms_per_word': ['democrat', 'democrats', 'liberal', 'liberals', 'leftist', 'lefties'],
-    'right_terms_per_word': ['republican', 'republicans', 'conservative', 'conservatives', 'rightist'], 
+    'left_terms_per_word': ['democrat', 'liberal', 'leftist', 'lefties'],
+    'right_terms_per_word': ['republican', 'conservative', 'rightist'], 
     'libertarian_per_word': ['libertarian'],
     'authorirarian_per_word': ['authoritarian'],
-    'music_per_word': ['music']
+    'music_per_word': ['music'],
+    'articles_per_word': ['a', 'an', 'the'] 
 } 
       
