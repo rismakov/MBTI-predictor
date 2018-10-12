@@ -17,9 +17,6 @@ class StyleFeatures(object):
     '''
 
     def __init__(self, posts):
-        # sentences works by finding punctuation at the ends of sentences. 
-        # all posts combined with periods added to the end of each post - to be able to detect sentences
-        # self.posts = posts
         self.stylometry_markers = {}
         self.posts = posts
 
@@ -27,8 +24,7 @@ class StyleFeatures(object):
         self.textblob_posts = TextBlob(all_posts_adding_periods)
 
         self.sentences = self.get_sentences()
-        self.words = [word.singularize() for word in self.get_words() 
-                      if ('v=' not in word) and (word not in invalid_urls)] 
+        self.words = self.get_words()
         self.separate_links_from_words()
         
         self.num_of_posts = len(posts.split('|||'))
@@ -64,9 +60,6 @@ class StyleFeatures(object):
     def get_sentences(self):
         '''Extracts all sentences from a string of text. 
 
-        NOTE: ellipses at end of sentence are truncated. Ellipses in middle of sentence will separate into two sentences 
-        if followed by upercase letter, otherwise is counted as the same sentences.
-
         :param posts: string from which sentences will be extracted.
         :returns: TextBlob sentences object  
         '''
@@ -79,7 +72,11 @@ class StyleFeatures(object):
         :param posts: string from which sentences will be extracted.
         :returns: TextBlob sentences object  
         '''
-        return self.textblob_posts.words
+
+        return [
+            word.singularize() for word in self.textblob_posts.words 
+            if ('v=' not in word) and (word not in invalid_urls)
+        ] 
 
     def separate_links_from_words(self):
         '''Extracts all unique url links from list of words. 
@@ -127,7 +124,7 @@ class StyleFeatures(object):
 
     def add_frequencies_of_punctuation_tokens_per_word(self):
         for punct in freq_punctuation_per_word:
-            self.stylometry_markers[punct + 'per_word'] = self.get_freq_of_items_in_list(
+            self.stylometry_markers[punct + '_per_word'] = self.get_freq_of_items_in_list(
                 self.all_punctuation_in_text, [punct], self.words) * 1000    
 
     def add_frequencies_of_tokens_to_stylometry_markers(self):
@@ -137,20 +134,23 @@ class StyleFeatures(object):
 
     def add_frequencies_of_link_types_to_stylometry_markers(self):
         num_of_links = len(self.links)
-        self.stylometry_markers['links_per_post'] = (num_of_links / self.num_of_posts) * 1000 
+        self.stylometry_markers['links_per_post'] = (num_of_links / self.num_of_posts) * 100
 
         search_terms = ['facepalm', 'troll', 'youtube', 'tumblr.com', 'vimeo', '.gif']
 
         for search_term in search_terms:
             self.stylometry_markers[search_term + '_per_post'] = (
-                self.links.count(search_term) / self.num_of_posts) 
+                sum(search_term in link for link in self.links) / self.num_of_posts * 100)
 
-        self.stylometry_markers['images_per_post'] = sum(
-            [self.links.count(search_term) for search_term in image_markers]) / self.num_of_posts
+        self.stylometry_markers['images_per_post'] = (
+            sum(any(image_marker in link for image_marker in image_markers) for link in self.links)
+            / self.num_of_posts * 100
+        )
 
     def add_avg_lens_to_stylometry_markers(self):
         self.stylometry_markers['avg_words_per_post'] = self.num_of_words / self.num_of_posts
-        self.stylometry_markers['word_diversity'] = len(set(self.non_link_words)) / self.num_of_non_link_words
+        self.stylometry_markers['word_diversity'] = len(set([word.lower() for word in self.non_link_words
+            ])) / self.num_of_non_link_words
         self.stylometry_markers['avg_word_length'] = np.mean([len(word) for word in self.non_link_words])
 
         words_per_sentences = [len(sentence.split()) for sentence in self.sentences]
