@@ -74,7 +74,7 @@ def extract_lower_and_upper_bounds(data, group_by_col, feature):
     return feature_means, feature_sems, lower_bounds, upper_bounds
 
 
-def group_and_plot_by_type(data, group_by_col, feature, i):
+def group_and_plot_by_type(data, group_by_col, feature, i, n, m):
     feature_means, feature_sems, lower_bounds, upper_bounds = extract_lower_and_upper_bounds(
         data, group_by_col, feature)
 
@@ -84,7 +84,7 @@ def group_and_plot_by_type(data, group_by_col, feature, i):
         letter_2 = group_by_col[-1]
         # only plot if difference is statistically significant
         if is_statistically_significant(lower_bounds, upper_bounds, letter_1, letter_2):
-            plt.subplot(2, 2, i+1)
+            plt.subplot(n, m, i+1)
             errorbar_graph_of_mean_feature_values(feature_means, feature_sems, feature_sems.index, feature)
     else:
         errorbar_graph_of_mean_feature_values(feature_means, feature_sems, feature_sems.index, feature)        
@@ -98,14 +98,14 @@ def plot_all_graphs(data, features, letter_types):
         plt.figure()
         plt.title(feature)
         for i, letter_type in enumerate(letter_types):
-            group_and_plot_by_type(data, letter_type, feature, i)
+            group_and_plot_by_type(data, letter_type, feature, i, 2, 2)
 
-        filename_to_save = '../MBTI_project/plots/' + feature
+        filename_to_save = '../MBTI_project/plots/' + feature.replace('.', '')
         plt.savefig(filename_to_save, facecolor='whitesmoke')
         plt.close()
 
-        group_and_plot_by_type(data, 'type', feature)
-        filename_to_save = '../MBTI_project/plots/' + feature + '_all'
+        group_and_plot_by_type(data, 'type', feature, 1, 1, 1)
+        filename_to_save = '../MBTI_project/plots/' + feature.replace('.', '') + '_all'
         plt.savefig(filename_to_save, facecolor='whitesmoke')
         plt.close()    
 
@@ -119,7 +119,7 @@ def print_info(data, letter_types, features):
             letter_type_results[higher_key.format(letter_type[i])] = []
         
         for feature in features:
-            lower_bounds, upper_bounds = extract_lower_and_upper_bounds(data, letter_type, feature)
+            _, _, lower_bounds, upper_bounds = extract_lower_and_upper_bounds(data, letter_type, feature)
 
             letter_1, letter_2 = (letter_type[0], letter_type[1])
             if is_statistically_significant(lower_bounds, upper_bounds, letter_1, letter_2):
