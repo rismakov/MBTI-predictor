@@ -26,8 +26,9 @@ freq_tokens_per_word = {
     'mores_per_word': ['more'], 
     'verys_per_word': ['very'],
     'facts_per_word': ['fact'],
-    'you_per_word': ['you'],
-    'me_per_word': ['I', 'me', 'mine'],
+    'you_per_word': ['you', 'your'],
+    'they_per_word': ['they', 'them', 'he', 'she'],
+    'me_per_word': ['I', 'me', 'myself'],
     'we_per_word': ['us', 'we', 'our'],
     'formality_level': formality_markers,
     'swear_words_per_word': swear_words,
@@ -46,6 +47,9 @@ freq_tokens_per_word = {
     'libertarian_per_word': ['libertarian'],
     'authorirarian_per_word': ['authoritarian'],
     'music_per_word': ['music'],
-    'articles_per_word': ['a', 'an', 'the'] 
+    'articles_per_word': ['a', 'an', 'the'],
+    'sorrys_per_word': ['sorry'],
+    'sad_terms_per_word': ['sad', 'miserable', 'lonely'],
+    'absolutist_terms_per_word': ['nothing', 'always', 'completely']  
 } 
       
