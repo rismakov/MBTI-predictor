@@ -8,8 +8,8 @@ import time
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from constants import LABEL_COL, TEXT_COL, VECTORIZED_PATH, WORDS_TO_REMOVE_TFIDF
-from utils import open_data
+from utils.constants import LABEL_COL, TEXT_COL, VECTORIZED_PATH, WORDS_TO_REMOVE_TFIDF
+from utils.utils import open_data
 
 
 def add_metadata_to_tfidf_mat(matrix, metadata, vectorizer):

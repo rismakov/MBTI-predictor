@@ -4,8 +4,6 @@ import cPickle
 import matplotlib.pyplot as plt
 import numpy as np
 
-from itertools import izip
-
 # import plotly.plotly as py
 # import plotly.graph_objs as go
 
