@@ -24,20 +24,20 @@ class Classifiers(object):
     Classifier object for fitting, storing, and comparing multiple model output
     '''
 
-    def get_abbr_class_name(clf):
-        '''Returns an abbreviated version of the classifier name. Example: Random Forest returns 'RF'. 
+    def get_abbr_class_name(self, clf):
+        '''Returns an abbreviated version of the classifier name. Example: Random Forest returns 'RF'.
         '''
         clf_name = clf.__class__.__name__
         if clf_name == 'OneVsRestClassifier':
-            clf_name = clf.estimator.__class__.__name__  
-        
+            clf_name = clf.estimator.__class__.__name__
+
         return ''.join([letter for letter in clf_name if letter in CAPITAL_LETTERS])
 
     def __init__(self, classifier_list, X, y):
         self.classifiers = classifier_list
         self.classifier_names = []
         for clf in self.classifiers:
-            self.classifier_names.append(get_abbr_class_name(clf))
+            self.classifier_names.append(self.get_abbr_class_name(clf))
 
         self._X_train, self._X_test, self._y_train, self._y_test = train_test_split(
             X, y, test_size=0.30, random_state=18)
@@ -53,7 +53,7 @@ class Classifiers(object):
 
     def grid_search(self, params_dict):
         for clf, params in izip(self.classifiers, params_dict):
-            print("\n____________{}____________".format(clf.estimator.__class__.__name__.))
+            print("\n____________{}____________".format(clf.estimator.__class__.__name__))
             gscv = GridSearchCV(clf, params, scoring='f1_macro')
             clf = gscv.fit(self._X_train, self._y_train)
             print('Best parameters:', clf.best_params_)
@@ -73,7 +73,7 @@ class Classifiers(object):
                         correct_cnt += 1
                     else:
                         incorrect_cnt += 1
-            
+
             accuracy = correct_cnt / (correct_cnt + incorrect_cnt)
             print("Accuracy: {:.3%}".format(accuracy))
             print("\n")
