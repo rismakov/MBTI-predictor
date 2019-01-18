@@ -68,7 +68,7 @@ class Classifiers(object):
             correct_cnt = 0
             incorrect_cnt = 0
             for true_type, pred_type in izip(self._y_test, predictions):
-                for i in xrange(4):
+                for i in range(4):
                     if true_type[i] == pred_type[i]:
                         correct_cnt += 1
                     else:

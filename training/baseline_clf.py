@@ -11,7 +11,7 @@ class BaselineClassifier(object):
         self._y = y
 
     def predict(self, X):
-        return [choice(list(self._y)) for i in xrange(X.shape[0])]
+        return [choice(list(self._y)) for i in range(X.shape[0])]
 
     def get_params(self, deep=False):
         return {}
