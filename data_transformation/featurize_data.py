@@ -18,6 +18,10 @@ num_cores = 4  # number of cores on your machine
 
 
 def debug(data):
+    '''Prints row number while iterating over DataFrame for debugging purposes.
+
+    :data param type: Pandas DataFrame.
+    '''
     stylometry_info = []
     for i, row in data.iterrows():
         print(i)
@@ -25,7 +29,7 @@ def debug(data):
 
 
 def add_stylometry_info(data):
-    '''Adds 'stylometry' column to inputted data.
+    '''Adds 'stylometry' information to inputted data.
 
     :param data type: Pandas DataFrame.
     :returns type: Pandas DataFrame with additional 'stylometry' column.
@@ -59,6 +63,11 @@ def print_percentages_of_each_type(data):
 
 
 def convert_fields_to_columns(data):
+    '''Converts 'stylometry' column with dictionary type into separate columns with each dict field a separate column.
+
+    :param data type: Pandas DataFrame with 'stylometry' column available.
+    :returns type: Pandas DataFrame with additional columns, dropping 'stylometry' column.
+    '''
     features = data[FEATURES_COL][0]
     for feature in features:
         data[feature] = [d[feature] for d in data[FEATURES_COL]]
