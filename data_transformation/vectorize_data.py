@@ -8,11 +8,8 @@ import time
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from constants import LABEL_COL, TEXT_COL, WORDS_TO_REMOVE_TFIDF
+from constants import LABEL_COL, TEXT_COL, VECTORIZED_PATH, WORDS_TO_REMOVE_TFIDF
 from utils import open_data
-
-
-TFIDF_DATA_PATH = 'tfidf_data.csv'
 
 
 def add_metadata_to_tfidf_mat(matrix, metadata, vectorizer):
@@ -124,7 +121,7 @@ if __name__ == "__main__":
     vectorizer, matrix = vectorize_articles(data[TEXT_COL])
     X = add_metadata_to_tfidf_mat(matrix, data, vectorizer)
 
-    X.to_csv(TFIDF_DATA_PATH, encoding='utf-8')
+    X.to_csv(VECTORIZED_PATH, encoding='utf-8')
 
     seconds = time.time() - start_time
     minutes = seconds / 60
