@@ -110,26 +110,26 @@ def plot_all_graphs(data, features, letter_types):
         plt.close()    
 
 
-def print_info(data, letter_types, features):
-    for i, letter_type in enumerate(letter_types):
-        letter_type_results = {}
+def compare_types(data, cols_to_group_by, all_types_to_compare, features):
+    for col_to_group_by, letter_types in zip(cols_to_group_by, all_types_to_compare):
         
         higher_key = '{}_higher'
-        for i in xrange(2):
-            letter_type_results[higher_key.format(letter_type[i])] = []
+        
+        letter_type_results = {} 
+        for letter_type in letter_types:
+            letter_type_results[higher_key.format(letter_type)] = []
         
         for feature in features:
-            _, _, lower_bounds, upper_bounds = extract_lower_and_upper_bounds(data, letter_type, feature)
+            _, _, lower_bounds, upper_bounds = extract_lower_and_upper_bounds(data, col_to_group_by, feature)
 
-            letter_1, letter_2 = (letter_type[0], letter_type[1])
+            letter_1, letter_2 = (letter_types[0], letter_types[1])
             if is_statistically_significant(lower_bounds, upper_bounds, letter_1, letter_2):
                 max_ind = lower_bounds[lower_bounds == lower_bounds.max()].index
                 letter_type_results[higher_key.format(max_ind[0])].append(feature)
 
-        for i in xrange(2):
-            letter = letter_type[i]
-            print('The following features are higher in {} type'.format(type_mappings[letter]))
-            for feature in letter_type_results[higher_key.format(letter)]:
+        for letter_type in letter_types:
+            print('The following features are higher in {} type'.format(type_mappings.get(letter_type, letter_type)))
+            for feature in letter_type_results[higher_key.format(letter_type)]:
                 print(feature)
             print()
 
@@ -142,9 +142,6 @@ if __name__ == "__main__":
     for field_to_remove in ['Unnamed: 0', 'type', 'posts']:
         features.remove(field_to_remove)
 
-    print('Features:')
-    print(features)
-
     data['EI'] = [mbti_type[0] for mbti_type in data['type']]
     data['NS'] = [mbti_type[1] for mbti_type in data['type']]
     data['FT'] = [mbti_type[2] for mbti_type in data['type']]
@@ -153,8 +150,22 @@ if __name__ == "__main__":
     data['2_3'] = [mbti_type[1:3] for mbti_type in data['type']]
     data['1_3_4'] = [mbti_type[0:1] + mbti_type[2:4] for mbti_type in data['type']]
     
-    letter_types = ['EI', 'NS', 'FT', 'JP']
+    cols_to_group_by = ['EI', 'NS', 'FT', 'JP']
+    all_types_to_compare = [['E', 'I'], ['N', 'S'], ['F', 'T'], ['J', 'P']]
 
-    plot_all_graphs(data, features, letter_types)
+    # plot_all_graphs(data, features, cols_to_group_by)
 
-    print_info(data, letter_types, features)
+    compare_types(data, cols_to_group_by, all_types_to_compare, features)
+
+    # run below to compare any NTs and NFs
+    cols_to_group_by = ['2_3']
+    all_types_to_compare = [['NT', 'NF']]
+    data_minimized = data.loc[data[cols_to_group_by[0]].isin(all_types_to_compare[0])]
+    compare_types(data_minimized, cols_to_group_by, all_types_to_compare, features)
+
+    # run below to compare any two types to each other
+    cols_to_group_by = ['type']
+    all_types_to_compare = [['ENTP', 'INFP']]
+    data_minimized = data.loc[data[cols_to_group_by[0]].isin(all_types_to_compare[0])]
+    compare_types(data_minimized, cols_to_group_by, all_types_to_compare, features)
+
