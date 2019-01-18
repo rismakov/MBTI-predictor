@@ -2,11 +2,9 @@ from __future__ import division, print_function
 
 import numpy as np
 import pandas as pd
-import zipfile
+import time
 
-from Classifiers import Classifiers
 from multiprocessing import Pool
-
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
@@ -16,61 +14,15 @@ from sklearn.svm import SVC, LinearSVC
 from sklearn.tree import DecisionTreeClassifier
 from xgboost import XGBClassifier
 
-from baseline_clf import BaselineClassifier, MajorityBaselineClassifier
-from stylometry_analysis import StyleFeatures
+import tensorflow as tf
+from tensorflow import keras
 
-PATH = '../MBTI_project/featurized_mbti'
+from baseline_clf import BaselineClassifier, MajorityBaselineClassifier
+from classifier_runner import Classifiers
+
 
 num_partitions = 10  # number of partitions to split dataframe
 num_cores = 4  # number of cores on your machine
-
-
-def add_stylometry_info(data):
-    data['stylometry'] = data['posts'].apply(lambda x: StyleFeatures(x))
-    return data
-
-
-def parallelize_dataframe(df, func):
-    print('Spliting data.')
-    df_split = np.array_split(df, num_partitions)
-    print('Pooling data.')
-    pool = Pool(num_cores)
-    print('Concatenating data.')
-    df = pd.concat(pool.map(func, df_split))
-    pool.close()
-    print('Joining data.')
-    pool.join()
-    return df
-
-
-def featurize_data():
-    zf = zipfile.ZipFile('../MBTI_project/mbti_1.csv.zip') 
-    data = pd.read_csv(zf.open('mbti_1.csv'), encoding='utf-8')
-
-    percents_of_each_type = data.groupby('type').count()['posts'] / sum(data.groupby('type').count()['posts']) * 100
-    print('Sanity Check Passes: ', sum(percents_of_each_type) == 100)
-
-    data = parallelize_dataframe(data, add_stylometry_info)
-
-    features = data['stylometry'][0]
-    for feature in features:
-        print(feature)
-        data[feature] = [d[feature] for d in data['stylometry']]
-
-    data.drop('stylometry', axis=1, inplace=True)
-    print(data.columns)
-    data.to_csv(PATH, encoding='utf-8')
-
-
-def open_data():
-    featurized_data = pd.read_csv(PATH, encoding='utf-8').drop(['Unnamed: 0', 'posts'], axis=1)
-    X = featurized_data.drop(['type', 'avg_post_len', 'mean_sentence_len', 'std_sentence_len'], axis=1)
-    y = featurized_data['type']
-
-    # Because Naive Bayes doesnt accept negative values: 
-    X['polarity'] = X['polarity'] + 1
-
-    return X, y
 
 
 def cross_validate_and_print_results(clfs):
@@ -80,18 +32,33 @@ def cross_validate_and_print_results(clfs):
     mbti_model.print_cross_val_results()
     
 
-
 def grid_search(clfs, params):
     X, y = open_data()
 
     mbti_model = Classifiers(clfs, X, y)
     mbti_model.grid_search(params)
 
+
+def run_models(clfs):
+    pass
+
 if __name__ == "__main__":
     # RUN BELOW TO FEATURIZE DATA:
-    # featurize_data()
+    start_time = time.time()
+    print(start_time)
+
+    featurized_data = pd.read_csv(FEATURIZED_PATH, encoding='utf-8')
+    vectorized_data = pd.read_csv(VECTORIZED_PATH, encoding='utf-8')
     
+    data = featurized_data.union(vectorized_data)
+
+    tf_model = keras.Sequential([
+        keras.layers.Dense(128, activation=tf.nn.relu),
+        keras.layers.Dense(10, activation=tf.nn.softmax)
+    ])
+
     clfs = [
+        tf_model,
         MLPClassifier(), 
         XGBClassifier(learning_rate=0.1, n_estimators=100),
         GradientBoostingClassifier(learning_rate=0.05, n_estimators=70),
@@ -104,12 +71,14 @@ if __name__ == "__main__":
         MultinomialNB()
     ]
 
+
     multi_clfs = [BaselineClassifier(), MajorityBaselineClassifier()]
     for clf in clfs:
         multi_clfs.append(OneVsRestClassifier(clf))
 
-    # cross_validate_and_print_results(multi_clfs)
+    cross_validate_and_print_results(multi_clfs)
 
+    '''
     clfs_to_grid_search = [XGBClassifier(), AdaBoostClassifier()]
     multi_clfs_to_gs = []
     for clf in clfs_to_grid_search:
@@ -124,7 +93,7 @@ if __name__ == "__main__":
         },
     ]
     
-    grid_search(multi_clfs_to_gs, params)
+    # grid_search(multi_clfs_to_gs, params)
 
     # mbti_model.train(save_model=True)
     # mbti_model.grid_search(params)
@@ -133,3 +102,7 @@ if __name__ == "__main__":
     # mbti_model.test()
     # mbti_model.plot_roc_curve()
 
+    seconds = time.time() - start_time
+    minutes = seconds / 60
+    print("Featurizer took", minutes, "minutes to run")
+    '''
