@@ -72,7 +72,7 @@ def convert_fields_to_columns(data):
     for feature in features:
         data[feature] = [d[feature] for d in data[FEATURES_COL]]
 
-    return data.drop(FEATURES_COL, axis=1)
+    return data.drop([FEATURES_COL, TEXT_COL], axis=1)
 
 
 def featurize_data(debug=False):
