@@ -22,6 +22,13 @@ class Classifiers(object):
     Classifier object for fitting, storing, and comparing multiple model output
     '''
 
+    def __init__(self, classifier_list, X, y):
+        self.classifiers = classifier_list
+        self.classifier_names = [self.get_abbr_class_name(clf) for clf in self.classifiers]
+
+        self._X_train, self._X_test, self._y_train, self._y_test = train_test_split(
+            X, y, test_size=0.30, random_state=18)
+
     def get_abbr_class_name(self, clf):
         '''Returns an abbreviated version of the classifier name. Example: Random Forest returns 'RF'.
         '''
@@ -31,17 +38,8 @@ class Classifiers(object):
 
         return ''.join([letter for letter in clf_name if letter in CAPITAL_LETTERS])
 
-    def __init__(self, classifier_list, X, y):
-        self.classifiers = classifier_list
-        self.classifier_names = []
-        for clf in self.classifiers:
-            self.classifier_names.append(self.get_abbr_class_name(clf))
-
-        self._X_train, self._X_test, self._y_train, self._y_test = train_test_split(
-            X, y, test_size=0.30, random_state=18)
-
-    def train(self, save_model=False):
-        for clf, name in izip(self.classifiers, self.classifier_names):
+    def fit_all_clfs(self, save_model=False):
+        for clf, name in zip(self.classifiers, self.classifier_names):
             print("\n____________{}____________".format(name))
             clf.fit(self._X_train, self._y_train)
 
@@ -50,7 +48,7 @@ class Classifiers(object):
                     cPickle.dump(clf, f)
 
     def grid_search(self, params_dict):
-        for clf, params in izip(self.classifiers, params_dict):
+        for clf, params in zip(self.classifiers, params_dict):
             print("\n____________{}____________".format(clf.estimator.__class__.__name__))
             gscv = GridSearchCV(clf, params, scoring='f1_macro')
             clf = gscv.fit(self._X_train, self._y_train)
@@ -58,14 +56,14 @@ class Classifiers(object):
             print('Best score:', clf.best_score_)
             print()
 
-    def test(self):
-        for name, clf in izip(self.classifier_names, self.classifiers):
+    def test_all_clfs(self):
+        for name, clf in zip(self.classifier_names, self.classifiers):
             print("\n____________{}____________".format(name))
             predictions = clf.predict(self._X_test)
 
             correct_cnt = 0
             incorrect_cnt = 0
-            for true_type, pred_type in izip(self._y_test, predictions):
+            for true_type, pred_type in zip(self._y_test, predictions):
                 for i in range(4):
                     if true_type[i] == pred_type[i]:
                         correct_cnt += 1
@@ -98,13 +96,14 @@ class Classifiers(object):
     def print_cross_val_results(self):
         # iterate over all classifiers
         mean_cross_val_metrics = {}
-        for clf, name in izip(self.classifiers, self.classifier_names):
+        for clf, name in zip(self.classifiers, self.classifier_names):
             print('___________________{}___________________'.format(name))
 
             scoring = get_comprehensive_scoring_types()
             cross_val_metrics = cross_validate(clf, self._X_train, self._y_train, scoring=scoring)
 
             # get mean of all cross val results
-            mean_cross_val_metrics[name] = {k: np.mean(v) for k, v in cross_val_metrics.iteritems() if 'test' in k}
+            mean_cross_val_metrics[name] = {k: np.mean(v) for k, v in cross_val_metrics.items() if 'test' in k}
 
-        print_results_in_table(mean_cross_val_metrics, self.classifiers, self.classifier_names)
+        print(mean_cross_val_metrics)
+        # print_results_in_table(mean_cross_val_metrics, self.classifiers, self.classifier_names)
