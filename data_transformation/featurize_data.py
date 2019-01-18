@@ -6,9 +6,9 @@ import time
 
 from multiprocessing import Pool
 
-from constants import FEATURIZED_PATH, LABEL_COL, TEXT_COL
 from stylometry_analysis import StyleFeatures
-from utils import open_data
+from utils.constants import FEATURIZED_PATH, LABEL_COL, TEXT_COL
+from utils.utils import open_data
 
 
 FEATURES_COL = 'stylometry'
