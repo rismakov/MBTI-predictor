@@ -20,13 +20,13 @@ class StyleFeatures(object):
     def __init__(self, posts):
         self.stylometry_markers = {}
         self.posts = posts
-     
-        self.textblob_posts = TextBlob(self.get_posts_with_periods_at_ends() )
+
+        self.textblob_posts = TextBlob(self.get_posts_with_periods_at_ends())
 
         self.sentences = self.get_sentences()
         self.words = self.get_words()
         self.separate_links_from_words()
-        
+
         self.track_number_of_words_and_sentences()
 
         self.posts_removing_links = self.remove_links_from_text(self.posts)
@@ -53,7 +53,7 @@ class StyleFeatures(object):
 
     def get_posts_with_periods_at_ends(self):
         '''This adds periods to the end of posts which are missing punctuation at the end. This is so TextBlob will be
-        able to extract sentences from the text properly. 
+        able to extract sentences from the text properly.
         '''
         split_posts = self.posts.split('|||')
 
@@ -61,13 +61,13 @@ class StyleFeatures(object):
             if post:
                 if post[-1] not in ['?', '!', '.']:
                     split_posts[i] = post + '.'
-        return ' '.join(split_posts) 
+        return ' '.join(split_posts)
 
     def get_sentences(self):
-        '''Extracts all sentences from a string of text. 
+        '''Extracts all sentences from a string of text.
 
         :param posts: string from which sentences will be extracted.
-        :returns: TextBlob sentences object  
+        :returns: TextBlob sentences object
         '''
 
         return self.textblob_posts.sentences
@@ -76,27 +76,27 @@ class StyleFeatures(object):
         '''Extracts all sentences from a string of text.
 
         :param posts: string from which sentences will be extracted.
-        :returns: TextBlob sentences object  
+        :returns: TextBlob sentences object
         '''
 
         return [
-            word.singularize() for word in self.textblob_posts.words 
+            word.singularize() for word in self.textblob_posts.words
             if ('v=' not in word) and (word not in INVALID_URLS)
-        ] 
+        ]
 
     def separate_links_from_words(self):
-        '''Extracts all unique url links from list of words. 
+        '''Extracts all unique url links from list of words.
 
         :param words: list of strings representing all words in text
         :returns: list of strings representing url links
         '''
-        non_link_words = [] 
+        non_link_words = []
         links = []
         for word in self.words:
             if ('.com' in word) or ('www.' in word):
                 links.append(word)
             else:
-                non_link_words.append(word) 
+                non_link_words.append(word)
         self.links = links
         self.non_link_words = non_link_words
 
@@ -109,13 +109,13 @@ class StyleFeatures(object):
         pos_tags = [tag for word, tag in self.textblob_posts.pos_tags]
 
         keys = [
-            'adjs_per_word', 'interjections_per_word', 'proper_nouns_per_word', 'nouns_per_word', 
-            'personal_pronouns_per_word', 'prepositions_per_word', 
+            'adjs_per_word', 'interjections_per_word', 'proper_nouns_per_word', 'nouns_per_word',
+            'personal_pronouns_per_word', 'prepositions_per_word',
             'determiners_per_word', 'adverbs_per_word', 'verbs_per_word'
         ]
         pos_abbrs = [
-            'JJ', 'UH', 'NNP', 'NN', 
-            'PRP', 'IN', 
+            'JJ', 'UH', 'NNP', 'NN',
+            'PRP', 'IN',
             'DT', 'RB', 'VB'
         ]
 
@@ -131,7 +131,7 @@ class StyleFeatures(object):
     def add_frequencies_of_punctuation_tokens_per_word(self):
         for punct in freq_punctuation_per_word:
             self.stylometry_markers[punct + '_per_word'] = get_freq_of_items_in_list(
-                self.all_punctuation_in_text, [punct], self.num_of_words) * 1000    
+                self.all_punctuation_in_text, [punct], self.num_of_words) * 1000
 
     def add_frequencies_of_tokens_to_stylometry_markers(self):
         for key, items in freq_token_types_per_word.items():
@@ -154,8 +154,8 @@ class StyleFeatures(object):
 
     def add_avg_lens_to_stylometry_markers(self):
         self.stylometry_markers['avg_words_per_post'] = self.num_of_words / self.num_of_posts
-        self.stylometry_markers['word_diversity'] = len(set([word.lower() for word in self.non_link_words
-            ])) / self.num_of_non_link_words
+        self.stylometry_markers['word_diversity'] = (len(set([word.lower() for word in self.non_link_words])) /
+                                                     self.num_of_non_link_words)
         self.stylometry_markers['avg_word_length'] = np.mean([len(word) for word in self.non_link_words])
 
         words_per_sentences = [len(sentence.split()) for sentence in self.sentences]
@@ -172,31 +172,30 @@ class StyleFeatures(object):
 
         :returns type: Boolean.
         '''
-        return (sentence[0] == ':') and (sentence[-2] == ':') 
+        return (sentence[0] == ':') and (sentence[-2] == ':')
 
     def add_frequency_of_emojis_and_emoticons_to_stylometry_markers(self):
         # NOTE: .sentences removes ellipses that come at the end of sentences. fix this.
         self.stylometry_markers['ellipses_per_sentence'] = (
             get_count_of_characters_in_text(self.posts_removing_links, '...') / self.num_of_sentences
-        ) 
+        )
 
         self.stylometry_markers['emojis_per_sentence'] = (
             sum([self.is_emoji(sentence) for sentence in self.sentences]) / self.num_of_sentences
         )
 
         self.stylometry_markers['smilies_per_sentence'] = (
-            get_count_of_characters_in_text(self.posts_removing_links, ':)') + 
-            get_count_of_characters_in_text(self.posts_removing_links, ':D') + 
-            get_count_of_characters_in_text(self.posts_removing_links, ': )') + 
+            get_count_of_characters_in_text(self.posts_removing_links, ':)') +
+            get_count_of_characters_in_text(self.posts_removing_links, ':D') +
+            get_count_of_characters_in_text(self.posts_removing_links, ': )') +
             get_count_of_characters_in_text(self.posts_removing_links, ':-)')
         ) / self.num_of_sentences
 
     def add_capitilization_info_to_stylometry_markers(self):
-        self.stylometry_markers['all_caps_per_word'] = (sum([(word.upper() == word) and (word not in MBTI_TYPES_UPPER) 
-                                                             for word in self.non_link_words]) 
+        self.stylometry_markers['all_caps_per_word'] = (sum([(word.upper() == word) and (word not in MBTI_TYPES_UPPER)
+                                                             for word in self.non_link_words])
                                                         / self.num_of_non_link_words)
-        
+
         self.stylometry_markers['sentence_capitalization_freq'] = sum([
             sentence[0].upper() == sentence[0] for sentence in self.sentences
         ]) / self.num_of_sentences
-    
