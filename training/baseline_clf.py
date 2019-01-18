@@ -9,10 +9,15 @@ class BaselineClassifier(object):
         self.name = 'Baseline'
 
     def fit(self, X, y):
-        self._y = y
+        self._X = X
+        self._values = list(set(y))
+
+        y_len = len(y)
+        y_list = list(y)
+        self._p = [y_list.count(value) / y_len for value in self._values]
 
     def predict(self, X):
-        return [choice(list(self._y)) for i in range(X.shape[0])]
+        return np.random.choice(self._values, X.shape[0], p=self._p)
 
     def get_params(self, deep=False):
         return {}
