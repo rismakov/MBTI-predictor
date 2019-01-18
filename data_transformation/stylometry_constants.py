@@ -3,14 +3,14 @@ swear_words = {'fuck', 'fucking', 'fucked'}
 insulting_words = {'dumb', 'stupid', 'idiot', 'dipshit', 'retard', 'retarded', 'idiotic', 'dumbass'}
 scientific_terms = {'science', 'scientific', 'evidence'}
 excitment_words = {
-  'passion', 'passionate', 'interest', 'interesting', 
-  'exciting', 'excitment', 'excite', 
+  'passion', 'passionate', 'interest', 'interesting',
+  'exciting', 'excitment', 'excite',
   'fascinating', 'fascination', 'fascinate'
 }
 lol_terms = {'lol', 'haha', 'hahaha', 'lmao', 'lmfao'}
 
 INVALID_URLS = {
-    'URL=http', 'krhttp', 'accidenthttp', "'15758http", 
+    'URL=http', 'krhttp', 'accidenthttp', "'15758http",
     'href=http', 'bro.http', 'url=http', '68611http', 'u=http',
     'http', "'http", 'ame=http', 'school.http'
 }
@@ -48,7 +48,7 @@ freq_tokens_per_word = {
     'howevers_per_word': ['however'],
     'ifs_per_word': ['if'],
     'thats_per_word': ['that'],
-    'mores_per_word': ['more'], 
+    'mores_per_word': ['more'],
     'verys_per_word': ['very'],
     'reallys_per_word': ['really'],
     'facts_per_word': ['fact'],
@@ -61,7 +61,7 @@ freq_tokens_per_word = {
     'party_per_word': ['party'],
     'logic_per_word': ['logic'],
     'left_terms_per_word': ['democrat', 'liberal', 'leftist', 'lefties'],
-    'right_terms_per_word': ['republican', 'conservative', 'rightist'], 
+    'right_terms_per_word': ['republican', 'conservative', 'rightist'],
     'libertarian_per_word': ['libertarian'],
     'authorirarian_per_word': ['authoritarian'],
     'music_per_word': ['music'],
@@ -70,5 +70,5 @@ freq_tokens_per_word = {
     'love_per_word': {'love'},
     'people_per_word': {'people'},
     'agree_per_word': {'agree'},
-    'disagree_per_word': {'disagree'}   
-}      
+    'disagree_per_word': {'disagree'}
+}
