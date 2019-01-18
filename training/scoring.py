@@ -18,7 +18,7 @@ def get_multiclass_metrics(true, pred, average_types):
 
     for average_type in average_types:
         metrics[average_type] = get_precision_recall_f1(true, pred, average_type)
-      
+
     return metrics
 
 

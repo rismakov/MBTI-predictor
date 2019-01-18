@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-from constants import COLORS, COLOR_INCREASE, LETTER_TYPES 
+from constants import COLORS, COLOR_INCREASE, LETTER_TYPES
 
 
 def print_results_in_table(metrics, clfs, clf_names):
@@ -15,7 +15,7 @@ def print_results_in_table(metrics, clfs, clf_names):
 
     # metrics [clf name] [scoring type]
     cell_text = [
-        ['{:.2f}'.format(metrics[clf_name][scoring_type] * 100.0) for clf_name in clf_names] 
+        ['{:.2f}'.format(metrics[clf_name][scoring_type] * 100.0) for clf_name in clf_names]
         for scoring_type in scoring_types
     ]
 
@@ -37,7 +37,7 @@ def print_results_in_table(metrics, clfs, clf_names):
         colLabels=clf_names,  # colColours=None, colLoc='center',
         loc='center'
     )
-    
+
     print('Setting font.')
     table.set_fontsize(14)
     # table.scale(1.5, 3.0)
