@@ -24,16 +24,20 @@ class Classifiers(object):
     Classifier object for fitting, storing, and comparing multiple model output
     '''
 
+    def get_abbr_class_name(clf):
+        '''Returns an abbreviated version of the classifier name. Example: Random Forest returns 'RF'. 
+        '''
+        clf_name = clf.__class__.__name__
+        if clf_name == 'OneVsRestClassifier':
+            clf_name = clf.estimator.__class__.__name__  
+        
+        return ''.join([letter for letter in clf_name if letter in CAPITAL_LETTERS])
+
     def __init__(self, classifier_list, X, y):
         self.classifiers = classifier_list
         self.classifier_names = []
         for clf in self.classifiers:
-            if clf.__class__.__name__ == 'OneVsRestClassifier':
-                self.classifier_names.append(''.join([letter for letter in clf.estimator.__class__.__name__  
-                                             if letter in CAPITAL_LETTERS]))
-            else:
-                self.classifier_names.append(''.join([letter for letter in clf.__class__.__name__ 
-                                             if letter in CAPITAL_LETTERS]))
+            self.classifier_names.append(get_abbr_class_name(clf))
 
         self._X_train, self._X_test, self._y_train, self._y_test = train_test_split(
             X, y, test_size=0.30, random_state=18)

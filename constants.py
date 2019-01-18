@@ -1,5 +1,5 @@
 FEATURIZED_PATH = '../MBTI_project/data/featurized_data'
-TFIDF_DATA_PATH = '../MBTI_project/data/vectorized_data.csv'
+VECTORIZED_PATH = '../MBTI_project/data/vectorized_data.csv'
 
 TEXT_COL = 'posts'
 LABEL_COL = 'type'
