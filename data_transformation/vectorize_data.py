@@ -12,8 +12,11 @@ from utils.constants import LABEL_COL, TEXT_COL, VECTORIZED_PATH, WORDS_TO_REMOV
 from utils.utils import open_data
 
 
-def add_metadata_to_tfidf_mat(matrix, metadata, vectorizer):
-    df = pd.DataFrame(matrix.toarray(), columns=vectorizer.get_feature_names())
+def convert_sparse_mat_to_df(matrix, features):
+    return pd.DataFrame(matrix.toarray(), columns=features)
+
+def add_metadata_to_tfidf_mat(matrix, metadata, features):
+    df = convert_sparse_mat_to_df(matrix, features)
     return pd.concat([df, metadata], axis=1)
 
 
@@ -119,16 +122,16 @@ if __name__ == "__main__":
     data = open_data()
 
     vectorizer, matrix = vectorize_articles(data[TEXT_COL])
-    X = add_metadata_to_tfidf_mat(matrix, data, vectorizer)
+    features = vectorizer.get_feature_names()
 
-    X.to_csv(VECTORIZED_PATH, encoding='utf-8')
+    df = convert_sparse_mat_to_df(matrix, features)
+    df.to_csv(VECTORIZED_PATH, encoding='utf-8')
 
     seconds = time.time() - start_time
     minutes = seconds / 60
     print("Vectorizer took", minutes, "minutes to run")
 
     # print top used words:
-    features = vectorizer.get_feature_names()
     print(top_mean_features(matrix, features, min_tfidf=0.0, top_n=35))
 
     # print top features of each class:
