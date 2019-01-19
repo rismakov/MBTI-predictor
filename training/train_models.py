@@ -1,10 +1,8 @@
 from __future__ import division, print_function
 
-import numpy as np
 import pandas as pd
 import time
 
-from multiprocessing import Pool
 from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier, GradientBoostingClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.multiclass import OneVsRestClassifier
@@ -19,22 +17,19 @@ from tensorflow import keras
 
 from baseline_clf import BaselineClassifier, MajorityBaselineClassifier
 from classifier_runner import Classifiers
+from utils.constants import FEATURIZED_PATH, LABEL_COL, TEXT_COL, VECTORIZED_PATH
 
 
 num_partitions = 10  # number of partitions to split dataframe
 num_cores = 4  # number of cores on your machine
 
 
-def cross_validate_and_print_results(clfs):
-    X, y = open_data()
-
+def cross_validate_and_print_results(clfs, X, y):
     mbti_model = Classifiers(clfs, X, y)
     mbti_model.print_cross_val_results()
-    
+
 
 def grid_search(clfs, params):
-    X, y = open_data()
-
     mbti_model = Classifiers(clfs, X, y)
     mbti_model.grid_search(params)
 
@@ -42,15 +37,17 @@ def grid_search(clfs, params):
 def run_models(clfs):
     pass
 
+
 if __name__ == "__main__":
     # RUN BELOW TO FEATURIZE DATA:
     start_time = time.time()
-    print(start_time)
 
-    featurized_data = pd.read_csv(FEATURIZED_PATH, encoding='utf-8')
-    vectorized_data = pd.read_csv(VECTORIZED_PATH, encoding='utf-8')
-    
-    data = featurized_data.union(vectorized_data)
+    featurized_data = pd.read_csv(FEATURIZED_PATH, encoding='utf-8').drop(['Unnamed: 0'], axis=1)
+    vectorized_data = pd.read_csv(VECTORIZED_PATH, encoding='utf-8').drop(['Unnamed: 0'], axis=1)
+
+    data = pd.concat([featurized_data, vectorized_data], axis=1)
+    X = data.drop([LABEL_COL], axis=1)
+    y = data[LABEL_COL]
 
     tf_model = keras.Sequential([
         keras.layers.Dense(128, activation=tf.nn.relu),
@@ -58,8 +55,8 @@ if __name__ == "__main__":
     ])
 
     clfs = [
-        tf_model,
-        MLPClassifier(), 
+        # tf_model,
+        MLPClassifier(),
         XGBClassifier(learning_rate=0.1, n_estimators=100),
         GradientBoostingClassifier(learning_rate=0.05, n_estimators=70),
         AdaBoostClassifier(learning_rate=0.2, n_estimators=200),
@@ -71,12 +68,11 @@ if __name__ == "__main__":
         MultinomialNB()
     ]
 
-
     multi_clfs = [BaselineClassifier(), MajorityBaselineClassifier()]
     for clf in clfs:
         multi_clfs.append(OneVsRestClassifier(clf))
 
-    cross_validate_and_print_results(multi_clfs)
+    cross_validate_and_print_results(multi_clfs, X, y)
 
     '''
     clfs_to_grid_search = [XGBClassifier(), AdaBoostClassifier()]
@@ -92,12 +88,12 @@ if __name__ == "__main__":
          'estimator__n_estimators': [200, 250, 300, 400] # [70, 100, 150, 200, 300] - 300
         },
     ]
-    
+
     # grid_search(multi_clfs_to_gs, params)
 
     # mbti_model.train(save_model=True)
     # mbti_model.grid_search(params)
-    
+
     # mbti_model.train()
     # mbti_model.test()
     # mbti_model.plot_roc_curve()
