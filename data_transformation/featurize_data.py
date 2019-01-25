@@ -70,7 +70,12 @@ def convert_fields_to_columns(data):
     '''
     features = data[FEATURES_COL][0]
     for feature in features:
-        data[feature] = [d[feature] for d in data[FEATURES_COL]]
+        feature_col = [d[feature] for d in data[FEATURES_COL]]
+
+        if all(feature_col == 0.0):
+            raise Exception('Feature {} added with all zero values'.format(feature))
+
+        data[feature] = feature_col
 
     return data.drop([FEATURES_COL, TEXT_COL], axis=1)
 
