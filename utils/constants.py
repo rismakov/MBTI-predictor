@@ -1,18 +1,35 @@
-FEATURIZED_PATH = 'data/featurized_data'
-VECTORIZED_PATH = 'data/vectorized_data.csv'
+TFIDF_MAX_FEATURES = 1000
+
+FEATURIZED_PATH = 'data/featurized_data.csv'
+VECTORIZED_PATH = 'data/vectorized_data_{}.csv'.format(TFIDF_MAX_FEATURES)
+
+MODEL_COMPARISON_TABLE_FILE = 'model_comparison_table_{}'.format(TFIDF_MAX_FEATURES)
+
+PLOTS_PATH = 'plots/plots_by_type'
+FUNCTION_PLOTS_PATH = 'plots/plots_by_functions'
 
 TEXT_COL = 'posts'
 LABEL_COL = 'type'
 
-ENNEAGRAM_TERMS = ['1w2', '4w3', '4w5', '6w5', '7w6', 'so', 'sp', 'sx', 'enneagram', 'socionics', 'tritype']
+ENNEAGRAM_TERMS = [
+	'1w2', '2w1', '2w3', '3w2', '3w4', '4w3', '4w5', 
+	'6w5', '6w7', '7w6', '7w8', '8w7', '8w9', '9w8', 
+	'so', 'sp', 'sx', 'enneagram', 'ennegram', 'socionics', 'tritype', 
+	'7s', '8s']
 
 FUNCTIONS = ['fe', 'fi', 'ne', 'ni', 'se', 'si', 'te', 'ti', 'sj', 'dom', 'sensing', 'perceiving']
 
-IMAGE_TERMS = ['gif', 'giphy', 'image', 'img', 'imgur', 'jpeg', 'jpg', 'JPG', 'photobucket', 'png', 'tinypic']
+IMAGE_TERMS = ['gif', 'giphy', 'image', 'img', 'imgur', 'jpeg', 'jpg', 'JPG', 'photobucket', 'php', 'png', 'tinypic']
 
-INVALID_WORDS = ['im', 'mbti', 'functions', 'myers', 'briggs', 'types', 'type', 'personality']
+INVALID_WORDS = ['im', 'mbti', 'functions', 'myers', 'briggs', 'types', 'type', 'personality', '16personalities', '16']
 
-MBTI_PARTS = ['nt', 'nf', 'st', 'sf', 'nts', 'nfs']
+MBTI_PARTS = ['nt', 'nf', 'st', 'sf', 'sj', 
+			  'nts', 'nfs', 'sts', 'sfs', 'sjs', 
+			  'enxp', 'exfj', 'exfp', 'esxp',
+			  'ixfp', 'ixtp', 'ixtj', 'ixfj',
+			  'xntp', 'xnfj', 
+			  'nfp', 'ntp', 'ntj', 'nfp', 'sfj',
+			  'es', 'fj']
 
 MBTI_TYPES_UPPER = [
     'ENTP', 'INTP', 'ENTJ', 'INTJ', 'ENFP', 'INFP', 'ENFJ', 'INFJ',
