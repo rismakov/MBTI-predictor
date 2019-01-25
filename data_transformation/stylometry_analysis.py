@@ -9,7 +9,7 @@ from stylometry_constants import (
     freq_punctuation_per_sentence, freq_punctuation_per_word, freq_token_types_per_word, INVALID_URLS, LINK_TYPES
 )
 from utils.constants import IMAGE_TERMS, MBTI_TYPES_UPPER
-from utils.utils import get_count_of_characters_in_text, get_freq_of_items_in_list
+from utils.utils import get_count_of_characters_in_text, get_freq_of_characters_in_text_in_list, get_freq_of_items_in_list 
 
 
 class StyleFeatures(object):
@@ -144,13 +144,12 @@ class StyleFeatures(object):
 
         for search_term in LINK_TYPES:
             self.stylometry_markers[search_term + '_per_post'] = (
-                get_freq_of_items_in_list(self.links, [search_term], self.num_of_posts) * 100
-            )
+                get_freq_of_characters_in_text_in_list(self.links, [search_term], self.num_of_posts)
+            ) * 100
 
         self.stylometry_markers['images_per_post'] = (
-            sum(any(image_marker in link for image_marker in IMAGE_TERMS) for link in self.links)
-            / self.num_of_posts * 100
-        )
+            get_freq_of_characters_in_text_in_list(self.links, IMAGE_TERMS, self.num_of_posts)
+         ) * 100
 
     def add_avg_lens_to_stylometry_markers(self):
         self.stylometry_markers['avg_words_per_post'] = self.num_of_words / self.num_of_posts
