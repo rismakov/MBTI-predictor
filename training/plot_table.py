@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 
 from constants import COLORS, COLOR_INCREASE, LETTER_TYPES
+from utils.constants import MODEL_COMPARISON_TABLE_FILE
 
 
 def print_results_in_table(metrics, clfs, clf_names):
@@ -45,7 +46,7 @@ def print_results_in_table(metrics, clfs, clf_names):
     # fig.tight_layout()
 
     print('Saving figure.')
-    fig.savefig('table', dpi=100)
+    fig.savefig(MODEL_COMPARISON_TABLE_FILE, dpi=100)
     plt.show()
     print('Closing figure.')
     plt.close()
