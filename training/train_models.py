@@ -54,6 +54,8 @@ if __name__ == "__main__":
         keras.layers.Dense(10, activation=tf.nn.softmax)
     ])
 
+    X['polarity'] = X['polarity'] + 1  # remove negative values
+
     clfs = [
         # tf_model,
         MLPClassifier(),
