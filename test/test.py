@@ -3,6 +3,7 @@ from __future__ import division
 import unittest
 
 from stylometry_analysis import StyleFeatures
+from utils.utils import get_freq_of_characters_in_text_in_list, get_freq_of_items_in_list, get_count_of_characters_in_text
 
 text = (
     "http://www.youtube.com/watch?v=qsXHcwe3krw|||http://41.media.tumblr.com/tumblr_lfouy03PMA1qa1rooo1_500.jpg|||enfp"
@@ -306,6 +307,32 @@ class StyleFeaturesTests(unittest.TestCase):
         self.assertEqual(StyleFeatures.get_count_smilie_per_word(example2, ':D'), 2)
         self.assertEqual(StyleFeatures.get_count_smilie_per_word(example3, ':-)'), 1)
 
+class UtilitiesTests(unittest.TestCase):
+    def test_get_freq_of_characters_in_text_in_list(self):
+        lst = ['apple.gif', 'banana.gif', 'apple', 'gif', 'monkey', 'monkey.gif']
+        search_items = ['gif', 'monkey']
+        normalizer = 6
+
+        expected_result = 5/6
+        result = get_freq_of_characters_in_text_in_list(lst, search_items, normalizer)
+        self.assertEqual(expected_result, result)
+
+    def test_get_freq_of_items_in_list(self):
+        lst = ['apple.gif', 'banana.gif', 'apple', 'gif', 'monkey', 'monkey.gif']
+        search_items = ['gif', 'monkey']
+        normalizer = 6
+
+        expected_result = 2/6
+        result = get_freq_of_items_in_list(lst, search_items, normalizer)
+        self.assertEqual(expected_result, result)
+
+    def test_get_count_of_characters_in_text(self):
+        text = 'monkey eats the banana but doesnt like the apple. so it eats the banana.'
+        characters = 'banana'
+
+        expected_result = 2
+        result = get_count_of_characters_in_text(text, characters)
+        self.assertEqual(expected_result, result)
 
 if __name__ == '__main__':
     unittest.main()
