@@ -1,7 +1,10 @@
 from __future__ import division
 
 import pandas as pd
+import scipy
 import zipfile
+
+from utils.constants import FEATURES_PATH
 
 ZIP_FILENAME = 'data/mbti_1.csv.zip'
 FILENAME = 'mbti_1.csv'
@@ -16,10 +19,44 @@ def open_data():
     return pd.read_csv(zf.open(FILENAME), encoding='utf-8')
 
 
+def open_textfile():
+    with open(FEATURES_PATH) as f:
+        return [word.replace('\n', '') for word in f.readlines()]
+
+
+def save_textfile(my_list):
+    with open(FEATURES_PATH, 'w') as f:
+        for item in my_list:
+            f.write('{}\n'.format(item))
+
+
+def convert_sparse_mat_to_df(matrix, columns):
+    return pd.DataFrame(matrix.toarray(), columns=columns)
+
+
+def convert_df_to_sparse_mat(df):
+    return scipy.sparse.csr_matrix(df.values)
+
+
+def get_distribution_of_ylabel_classes(data, label_col):
+    '''Returns the distribution of all unique ylabel classes in the data.
+
+    :param data type: Pandas DataFrame.
+    :returns type: Pandas DataFrame.
+    '''
+    grouped_data = data.groupby(label_col).count()
+
+    col = grouped_data.columns[0]
+    counts = grouped_data[col]
+
+    total = sum(counts)
+    return counts.apply(lambda x: round(x / total * 100, 2))
+
+
 def get_freq_of_characters_in_text_in_list(lst, search_items, normalizer):
     '''Calculates the combined frequency given strings of characters within a list appear in a list of text.
 
-    Example: 
+    Example:
         lst = ['apple.gif', 'apple', '.gif', 'png']
         search_items = ['gif', 'apple']
         normalizer = 4
@@ -41,7 +78,7 @@ def get_freq_of_characters_in_text_in_list(lst, search_items, normalizer):
 def get_freq_of_items_in_list(lst, search_items, normalizer):
     '''Calculates the combined frequency of each item within a specified list divided by the normalizer specified.
 
-    Example: 
+    Example:
         lst = ['apple.gif', 'apple', '.gif']
         search_items = ['.gif', 'apple']
         normalizer = 3
