@@ -9,7 +9,9 @@ from stylometry_constants import (
     freq_punctuation_per_sentence, freq_punctuation_per_word, freq_token_types_per_word, INVALID_URLS, LINK_TYPES
 )
 from utils.constants import IMAGE_TERMS, MBTI_TYPES_UPPER
-from utils.utils import get_count_of_characters_in_text, get_freq_of_characters_in_text_in_list, get_freq_of_items_in_list 
+from utils.utils import (
+    get_count_of_characters_in_text, get_freq_of_characters_in_text_in_list, get_freq_of_items_in_list
+)
 
 
 class StyleFeatures(object):
