@@ -28,22 +28,7 @@ def print_results_in_table(metrics, clfs, clf_names):
         current_color = cell_colors[metric_ind][clf_ind]
         cell_colors[metric_ind][clf_ind] = COLOR_INCREASE[current_color]
 
-    # ax.axis('tight')
-    ax.axis('off')
-    table = ax.table(
-        cellText=cell_text, cellColours=cell_colors,
-        # cellColours=None,
-        # cellLoc='right', colWidths=None,
-        rowLabels=scoring_types, rowColours=COLORS, rowLoc='left',
-        colLabels=clf_names,  # colColours=None, colLoc='center',
-        loc='center'
-    )
-
-    print('Setting font.')
-    table.set_fontsize(14)
-    # table.scale(1.5, 3.0)
-
-    # fig.tight_layout()
+    plot_table(cell_text, scoring_types, clf_names, cell_colors=cell_colors)
 
     print('Saving figure.')
     fig.savefig(MODEL_COMPARISON_TABLE_FILE, dpi=100)
