@@ -95,7 +95,7 @@ expected_sentences = [
     "The last thing my INFJ friend posted on his facebook before committing suicide the next day.",
     "Rest in peace~   http://vimeo.com/22842206.",
     "Hello ENFJ7.",
-    "Sorry to hear of your distress.", 
+    "Sorry to hear of your distress.",
     "It's only natural for a relationship to not be perfection all the time in every moment of existence.",
     "Try to figure the hard times as times of growth, as... 84389  84390  http://wallpaperpassion.com/upload/23700/frie"
         "ndship-boy-and-girl-wallpaper.jpg  http://assets.dornob.com/wp-content/uploads/2010/04/round-home-design"
@@ -117,7 +117,7 @@ expected_sentences = [
     "It appears to be too late.",
     ":sad:.",
     "There's someone out there for everyone.",
-    "Wait...", 
+    "Wait...",
     "I thought confidence was a good thing.",
     "I just cherish the time of solitude b/c i revel within my inner world more whereas most other time i'd be workin.."
         ". just enjoy the me time while you can.",
@@ -140,7 +140,7 @@ expected_sentences = [
     "Banned for a whole host of reasons!",
     "http://www.youtube.com/watch?v=IRcrv41hgz4.",
     "1) Two baby deer on left and right munching on a beetle in the middle.",
-    "2) Using their own blood, two cavemen diary today's latest happenings on their designated cave diary wall.",  
+    "2) Using their own blood, two cavemen diary today's latest happenings on their designated cave diary wall.",
     "3) I see it as... a pokemon world  an infj society  everyone becomes an optimist.",
     "49142. http://www.youtube.com/watch?v=ZRCEq_JFeFM.",
     "http://discovermagazine.com/2012/jul-aug/20-things-you-didnt-know-about-deserts/desert.jpg.",
@@ -155,20 +155,20 @@ expected_sentences = [
 ]
 
 expected_links = [
-    'www.youtube.com/watch', 
-    '41.media.tumblr.com/tumblr_lfouy03PMA1qa1rooo1_500.jpg', 
-    'www.youtube.com/watch', 'www.youtube.com/watch', 
-    'www.youtube.com/watch', 'www.youtube.com/watch', 
-    'vimeo.com/22842206', 
-    'wallpaperpassion.com/upload/23700/friendship-boy-and-girl-wallpaper.jpg', 
-    'assets.dornob.com/wp-content/uploads/2010/04/round-home-design.jpg',  
-    'playeressence.com/wp-content/uploads/2013/08/RED-red-the-pokemon-master-32560474-450-338.jpg', 
-    'www.youtube.com/watch', 'www.youtube.com/watch', 
-    'www.youtube.com/watch', 'www.youtube.com/watch', 
-    'www.youtube.com/watch', 'www.youtube.com/watch', 
-    'www.youtube.com/watch', 'www.youtube.com/watch', 
-    'discovermagazine.com/2012/jul-aug/20-things-you-didnt-know-about-deserts/desert.jpg', 
-    'oyster.ignimgs.com/mediawiki/apis.ign.com/pokemon-silver-version/d/dd/Ditto.gif', 
+    'www.youtube.com/watch',
+    '41.media.tumblr.com/tumblr_lfouy03PMA1qa1rooo1_500.jpg',
+    'www.youtube.com/watch', 'www.youtube.com/watch',
+    'www.youtube.com/watch', 'www.youtube.com/watch',
+    'vimeo.com/22842206',
+    'wallpaperpassion.com/upload/23700/friendship-boy-and-girl-wallpaper.jpg',
+    'assets.dornob.com/wp-content/uploads/2010/04/round-home-design.jpg',
+    'playeressence.com/wp-content/uploads/2013/08/RED-red-the-pokemon-master-32560474-450-338.jpg',
+    'www.youtube.com/watch', 'www.youtube.com/watch',
+    'www.youtube.com/watch', 'www.youtube.com/watch',
+    'www.youtube.com/watch', 'www.youtube.com/watch',
+    'www.youtube.com/watch', 'www.youtube.com/watch',
+    'discovermagazine.com/2012/jul-aug/20-things-you-didnt-know-about-deserts/desert.jpg',
+    'oyster.ignimgs.com/mediawiki/apis.ign.com/pokemon-silver-version/d/dd/Ditto.gif',
     'www.serebii.net/potw-dp/Scizor.jpg'
 ]
 
@@ -244,11 +244,11 @@ class StyleFeaturesTests(unittest.TestCase):
     def test_get_words(self):
         sentence = ("Welcome to the robot ranks, person who downed my self-esteem cuz I'm not an avid signature artist "
                     "like herself. :proud:. http://www.youtube.com/watch?v=qsXHcwe3krw. ADD UPPERCASE WORDS.")
-        
+
         expected_words = [
-            'Welcome', 'to', 'the', 'robot', 'rank', 'person', 
+            'Welcome', 'to', 'the', 'robot', 'rank', 'person',
             'who', 'downed', 'my', 'self-esteem', 'cuz', 'I', "'m",
-            'not', 'an', 'avid', 'signature', 'artist', 'like', 'herself', 
+            'not', 'an', 'avid', 'signature', 'artist', 'like', 'herself',
             'proud', 'www.youtube.com/watch', 'ADD', 'UPPERCASE', 'WORD'
         ]
 
