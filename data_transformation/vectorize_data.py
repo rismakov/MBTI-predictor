@@ -1,6 +1,5 @@
 from __future__ import print_function
 
-import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import time
@@ -8,12 +7,9 @@ import time
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from utils.constants import LABEL_COL, TEXT_COL, VECTORIZED_PATH, WORDS_TO_REMOVE_TFIDF
-from utils.utils import open_data
+from utils.constants import VECTORIZED_PATH, TEXT_COL, WORDS_TO_REMOVE_TFIDF
+from utils.utils import convert_sparse_mat_to_df, open_data, save_textfile
 
-
-def convert_sparse_mat_to_df(matrix, features):
-    return pd.DataFrame(matrix.toarray(), columns=features)
 
 def add_metadata_to_tfidf_mat(matrix, metadata, features):
     df = convert_sparse_mat_to_df(matrix, features)
@@ -32,7 +28,6 @@ def top_tfidf_features(row, features, top_n=25):
     ''' Get top n tfidf values in row and return them with their corresponding feature names.'''
     topn_ids = np.argsort(row)[::-1][:top_n]
     top_features = [(features[i], row[i]) for i in topn_ids]
-    print(top_features)
     df = pd.DataFrame(top_features)
     df.columns = ['feature', 'tfidf']
     return df
@@ -94,28 +89,6 @@ def top_features_by_class_v2(matrix, y, features, min_tfidf=0.1, top_n=25):
     return dfs
 
 
-def plot_tfidf_classfeats_h(dfs):
-    ''' Plot the data frames returned by the function plot_tfidf_classfeats(). '''
-    fig = plt.figure(figsize=(12, 9), facecolor="w")
-    x = np.arange(len(dfs[0]))
-    for i, df in enumerate(dfs):
-        ax = fig.add_subplot(1, len(dfs), i+1)
-        ax.spines["top"].set_visible(False)
-        ax.spines["right"].set_visible(False)
-        ax.set_frame_on(False)
-        ax.get_xaxis().tick_bottom()
-        ax.get_yaxis().tick_left()
-        ax.set_xlabel("Mean Tf-Idf Score", labelpad=16, fontsize=14)
-        ax.set_title(str(df.label), fontsize=16)
-        ax.ticklabel_format(axis='x', style='sci', scilimits=(-2, 2))
-        ax.barh(x, df.tfidf, align='center', color='#3F5D7D')
-        ax.set_yticks(x)
-        ax.set_ylim([-1, x[-1]+1])
-        yticks = ax.set_yticklabels(df.feature)
-        plt.subplots_adjust(bottom=0.09, right=0.97, left=0.15, top=0.95, wspace=0.52)
-    plt.show()
-
-
 if __name__ == "__main__":
     start_time = time.time()
 
@@ -123,6 +96,7 @@ if __name__ == "__main__":
 
     vectorizer, matrix = vectorize_articles(data[TEXT_COL])
     features = vectorizer.get_feature_names()
+    save_textfile(features)
 
     df = convert_sparse_mat_to_df(matrix, features)
     df.to_csv(VECTORIZED_PATH, encoding='utf-8')
@@ -132,9 +106,12 @@ if __name__ == "__main__":
     print("Vectorizer took", minutes, "minutes to run")
 
     # print top used words:
-    print(top_mean_features(matrix, features, min_tfidf=0.0, top_n=35))
+    # dfs = top_features_by_class_v2(matrix2, y, features, min_tfidf=0.0, top_n=10)
+    # plot_tfidf_top_words_table(dfs[:8])
+
+    # print(top_mean_features(matrix, features, min_tfidf=0.0, top_n=35))
 
     # print top features of each class:
-    y = data[LABEL_COL]
-    dfs = top_features_by_class_v2(matrix, y, features, min_tfidf=0.0, top_n=10)
-    plot_tfidf_classfeats_h(dfs)
+    #
+    # dfs = top_features_by_class_v2(matrix, y, features, min_tfidf=0.0, top_n=10)
+    # plot_tfidf_classfeats_h(dfs)
