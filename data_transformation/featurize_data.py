@@ -51,17 +51,6 @@ def parallelize_dataframe(df, func):
     return df
 
 
-def print_percentages_of_each_type(data):
-    '''Prints the percentages each label appears in the data.
-
-    :param data type: Pandas DataFrame.
-    '''
-    grouped_data = data.groupby(LABEL_COL).count()[TEXT_COL]
-    total = sum(grouped_data)
-    percents_of_each_type = grouped_data.apply(lambda x: round(x / total * 100, 2))
-    print(percents_of_each_type)
-
-
 def convert_fields_to_columns(data):
     '''Converts 'stylometry' column with dictionary type into separate columns with each dict field a separate column.
 
@@ -82,8 +71,6 @@ def convert_fields_to_columns(data):
 
 def featurize_data(debug=False):
     data = open_data()
-
-    print_percentages_of_each_type(data)
 
     if debug:
         debug(data)
