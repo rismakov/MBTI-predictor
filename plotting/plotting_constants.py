@@ -27,3 +27,18 @@ COLOR_MAPPINGS = {
 }
 
 PLOT_COLORS = [COLOR_MAPPINGS[mbti_type[:2]] for mbti_type in MBTI_TYPES_UPPER]
+
+FUNCTION_LETTERS = ['E', 'I', 'N', 'S', 'F', 'T', 'J', 'P']
+
+LETTER_COLOR_MAPPINGS = {
+    'E': 'darkolivegreen',
+    'I': 'darkolivegreen',
+    'N': 'black',
+    'S': 'black',
+    'F': 'indianred',
+    'T': 'indianred',
+    'J': 'darkgray',
+    'P': 'darkgray',
+}
+
+LETTER_PLOT_COLORS = [LETTER_COLOR_MAPPINGS[letter] for letter in FUNCTION_LETTERS]
