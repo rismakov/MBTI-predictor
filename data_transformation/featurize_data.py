@@ -61,7 +61,7 @@ def convert_fields_to_columns(data):
     for feature in features:
         feature_col = [d[feature] for d in data[FEATURES_COL]]
 
-        if all(feature_col == 0.0):
+        if all(value == 0.0 for value in feature_col):
             raise Exception('Feature {} added with all zero values'.format(feature))
 
         data[feature] = feature_col
