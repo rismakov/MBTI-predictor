@@ -5,7 +5,7 @@ import numpy as np
 from string import punctuation
 from textblob import TextBlob
 
-from stylometry_constants import (
+from data_transformation.stylometry_constants import (
     freq_punctuation_per_sentence, freq_punctuation_per_word, freq_token_types_per_word, INVALID_URLS, LINK_TYPES
 )
 from utils.constants import IMAGE_TERMS, MBTI_TYPES_UPPER
@@ -191,6 +191,15 @@ class StyleFeatures(object):
             get_count_of_characters_in_text(self.posts_removing_links, ': )') +
             get_count_of_characters_in_text(self.posts_removing_links, ':-)')
         ) / self.num_of_sentences
+
+        self.stylometry_markers['hashtags_per_sentence'] = (
+            get_count_of_characters_in_text(self.posts_removing_links, '#')
+        ) / self.num_of_sentences
+
+        self.stylometry_markers['mentions_per_sentence'] = (
+            get_count_of_characters_in_text(self.posts_removing_links, '@')
+        ) / self.num_of_sentences
+
 
     def add_capitilization_info_to_stylometry_markers(self):
         self.stylometry_markers['all_caps_per_word'] = (sum([(word.upper() == word) and (word not in MBTI_TYPES_UPPER)
