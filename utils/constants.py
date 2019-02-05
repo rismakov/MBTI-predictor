@@ -1,4 +1,6 @@
-TFIDF_MAX_FEATURES = 1000
+RANDOM_STATE = 18
+
+TFIDF_MAX_FEATURES = 15000
 
 FEATURIZED_PATH = 'data/featurized_data.csv'
 VECTORIZED_PATH = 'data/vectorized_data_{}.csv'.format(TFIDF_MAX_FEATURES)
@@ -26,7 +28,7 @@ IMAGE_TERMS = ['gif', 'giphy', 'image', 'img', 'imgur', 'jpeg', 'jpg', 'JPG', 'p
 
 INVALID_WORDS = [
   'im', 'mbti', 'functions', 'myers', 'briggs', 'types', 'type',
-  'personality', '16personalities', '16', 'personalitycafe'
+  'personality', '16personalities', '16', 'personalitycafe', 'tapatalk'
 ]
 
 MBTI_PARTS = [
