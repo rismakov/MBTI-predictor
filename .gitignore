@@ -1,0 +1,26 @@
+
+# ds_store
+.DS_Store
+
+# pyc
+.pyc
+.cache
+
+*.png
+*.docx
+
+# All folders to ignore
+/plots
+/webapp
+/images
+/models
+/data
+
+# files
+webapp.py
+
+### Python ###
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
