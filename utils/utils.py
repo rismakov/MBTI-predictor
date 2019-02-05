@@ -4,7 +4,7 @@ import pandas as pd
 import scipy
 import zipfile
 
-from utils.constants import FEATURES_PATH
+from utils.constants import FEATURES_PATH, FEATURIZED_PATH, VECTORIZED_PATH
 
 ZIP_FILENAME = 'data/mbti_1.csv.zip'
 FILENAME = 'mbti_1.csv'
@@ -24,6 +24,13 @@ def open_textfile():
         return [word.replace('\n', '') for word in f.readlines()]
 
 
+def open_concat_data():
+    '''Opens featurized and vectorized data and returns concatenated merged data.
+    '''
+    featurized_data = pd.read_csv(FEATURIZED_PATH, encoding='utf-8').drop(['Unnamed: 0'], axis=1)
+    vectorized_data = pd.read_csv(VECTORIZED_PATH, encoding='utf-8').drop(['Unnamed: 0'], axis=1)
+
+    return pd.concat([featurized_data, vectorized_data], axis=1)
 def save_textfile(my_list):
     with open(FEATURES_PATH, 'w') as f:
         for item in my_list:
