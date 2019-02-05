@@ -30,8 +30,4 @@ def print_results_in_table(metrics, clfs, clf_names):
 
     plot_table(cell_text, scoring_types, clf_names, cell_colors=cell_colors)
 
-    print('Saving figure.')
-    fig.savefig(MODEL_COMPARISON_TABLE_FILE, dpi=100)
-    plt.show()
-    print('Closing figure.')
-    plt.close()
+    save_fig(MODEL_COMPARISON_TABLE_FILE)
