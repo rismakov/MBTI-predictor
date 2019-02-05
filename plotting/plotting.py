@@ -208,6 +208,16 @@ def plot_tfidf_top_words_table(dfs):
     plt.show()
 
 
+def add_relevant_cols_to_data(data):
+    for function, function_inds in FUNCTION_INDS.items():
+        start_ind, stop_ind = function_inds
+        data[function] = [mbti_type[start_ind:stop_ind] for mbti_type in data[LABEL_COL]]
+
+    data['1_3_4'] = [mbti_type[0:1] + mbti_type[2:4] for mbti_type in data[LABEL_COL]]
+
+    return data
+
+
 if __name__ == "__main__":
     featurized_data = pd.read_csv(FEATURIZED_PATH, encoding='utf-8').drop(['Unnamed: 0'], axis=1)
     vectorized_data = pd.read_csv(VECTORIZED_PATH, encoding='utf-8').drop(['Unnamed: 0'], axis=1)
@@ -215,6 +225,7 @@ if __name__ == "__main__":
     data = pd.concat([featurized_data, vectorized_data], axis=1)
 
     # plot_type_percentages(featurized_data)
+    data = add_relevant_cols_to_data(data)
 
     vectorized_matrix = convert_df_to_sparse_mat(vectorized_data)
     features = open_textfile()
@@ -231,11 +242,6 @@ if __name__ == "__main__":
     features = list(featurized_data.columns) + TOP_WORDS
     features.remove(LABEL_COL)
 
-    for function, function_inds in FUNCTION_INDS.items():
-        start_ind, stop_ind = function_inds
-        data[function] = [mbti_type[start_ind:stop_ind] for mbti_type in data[LABEL_COL]]
-
-    data['1_3_4'] = [mbti_type[0:1] + mbti_type[2:4] for mbti_type in data[LABEL_COL]]
 
     cols_to_group_by = ['EI', 'NS', 'FT', 'JP']
     all_types_to_compare = [['E', 'I'], ['N', 'S'], ['F', 'T'], ['J', 'P']]
