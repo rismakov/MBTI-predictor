@@ -9,9 +9,12 @@ from data_transformation.vectorize_data import top_features_by_class_v2
 from plotting_constants import COLOR_MAPPINGS, GLOBAL_PERCENTAGES, PLOT_COLORS
 from plotting_utils import add_title, label_fig_xaxis, plot_bar_graph, plot_table, save_fig
 from utils.constants import (
-    FEATURIZED_PATH, FUNCTION_PLOTS_PATH, LABEL_COL, MBTI_TYPES_UPPER, PLOTS_PATH, VECTORIZED_PATH
+    FUNCTION_PLOTS_PATH, FUNCTION_PLOTS_ONLY_SIG_PATH,
+    LABEL_COL, MBTI_TYPES_UPPER, PLOTS_PATH, TEXT_COL
 )
-from utils.utils import convert_df_to_sparse_mat, get_distribution_of_ylabel_classes, open_textfile
+from utils.utils import (
+    convert_df_to_sparse_mat, explode_df, get_distribution_of_ylabel_classes, open_concat_data, open_textfile
+)
 
 import matplotlib
 matplotlib.use('TkAgg')
@@ -219,12 +222,10 @@ def add_relevant_cols_to_data(data):
 
 
 if __name__ == "__main__":
-    featurized_data = pd.read_csv(FEATURIZED_PATH, encoding='utf-8').drop(['Unnamed: 0'], axis=1)
-    vectorized_data = pd.read_csv(VECTORIZED_PATH, encoding='utf-8').drop(['Unnamed: 0'], axis=1)
 
-    data = pd.concat([featurized_data, vectorized_data], axis=1)
 
     # plot_type_percentages(featurized_data)
+    data = open_concat_data()
     data = add_relevant_cols_to_data(data)
 
     vectorized_matrix = convert_df_to_sparse_mat(vectorized_data)

@@ -17,7 +17,8 @@ from tensorflow import keras
 
 from baseline_clf import BaselineClassifier, MajorityBaselineClassifier
 from classifier_runner import Classifiers
-from utils.constants import FEATURIZED_PATH, LABEL_COL, TEXT_COL, VECTORIZED_PATH
+from utils.constants import LABEL_COL, NUM_OF_TYPES, RANDOM_STATE, TEXT_COL
+from utils.utils import open_concat_data, remove_negative_values
 
 
 num_partitions = 10  # number of partitions to split dataframe
@@ -42,10 +43,7 @@ if __name__ == "__main__":
     # RUN BELOW TO FEATURIZE DATA:
     start_time = time.time()
 
-    featurized_data = pd.read_csv(FEATURIZED_PATH, encoding='utf-8').drop(['Unnamed: 0'], axis=1)
-    vectorized_data = pd.read_csv(VECTORIZED_PATH, encoding='utf-8').drop(['Unnamed: 0'], axis=1)
-
-    data = pd.concat([featurized_data, vectorized_data], axis=1)
+    data = open_concat_data()
     X = data.drop([LABEL_COL], axis=1)
     y = data[LABEL_COL]
 
