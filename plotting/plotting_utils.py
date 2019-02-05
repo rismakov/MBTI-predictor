@@ -22,17 +22,15 @@ def add_title(title, fontsize=10):
 
 def save_fig(filename):
     plt.savefig(filename, facecolor='whitesmoke', bbox_inches="tight")
+    plt.close()
 
 
-def plot_table(cell_text, row_labels=None, col_labels=None, row_colors=None, col_colors=None, cell_colors=None):
-    fig, ax = plt.subplots()
-    ax.axis('off')
-    table = ax.table(
-        cellText=cell_text, cellColours=cell_colors,
-        # cellLoc='right', colWidths=None,
-        rowLabels=row_labels, rowColours=row_colors, rowLoc='left',
-        colLabels=col_labels,  colColours=col_colors, colLoc='center',
+    table = plt.table(
+        cellText=cell_text, cellColours=cell_colors, cellLoc='left',
+        rowLabels=row_labels, rowColours=row_colors,
+        colLabels=col_labels, colColours=col_colors, colLoc='center',
         loc='center'
     )
 
-    table.set_fontsize(14)
+    table.set_fontsize(10)
+
