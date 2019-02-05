@@ -1,3 +1,5 @@
+import matplotlib
+matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 from constants import COLORS, COLOR_INCREASE, LETTER_TYPES
