@@ -25,6 +25,7 @@ def save_fig(filename):
     plt.close()
 
 
+def plot_table(cell_text, row_labels=None, col_labels=None, cell_colors=None, row_colors=None, col_colors=None):
     table = plt.table(
         cellText=cell_text, cellColours=cell_colors, cellLoc='left',
         rowLabels=row_labels, rowColours=row_colors,
@@ -34,3 +35,4 @@ def save_fig(filename):
 
     table.set_fontsize(10)
 
+    plt.axis('off')  # removes overlayed grid in subplots
