@@ -20,8 +20,8 @@ def add_title(title, fontsize=10):
     plt.title(title, fontsize=fontsize)
 
 
-def save_fig(filename):
-    plt.savefig(filename, facecolor='whitesmoke', bbox_inches="tight")
+def save_fig(filename, facecolor='whitesmoke'):
+    plt.savefig(filename, facecolor=facecolor, bbox_inches="tight")
     plt.close()
 
 
