@@ -1,6 +1,7 @@
 from __future__ import division
 
 import pandas as pd
+import pickle
 import scipy
 import zipfile
 
@@ -35,6 +36,9 @@ def save_textfile(my_list):
     with open(FEATURES_PATH, 'w') as f:
         for item in my_list:
             f.write('{}\n'.format(item))
+def save_model(model, filename):
+    with open(filename, 'wb') as f:
+        pickle.dump(model, f)
 
 
 def convert_sparse_mat_to_df(matrix, columns):

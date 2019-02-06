@@ -7,8 +7,9 @@ import time
 from nltk.corpus import stopwords
 from sklearn.feature_extraction.text import TfidfVectorizer
 
-from utils.constants import VECTORIZED_PATH, TEXT_COL, WORDS_TO_REMOVE_TFIDF
-from utils.utils import convert_sparse_mat_to_df, open_data, save_textfile
+from data_transformation.constants import WORDS_TO_REMOVE_TFIDF
+from utils.constants import VECTORIZED_PATH, TEXT_COL, TFIDF_MAX_FEATURES
+from utils.utils import convert_sparse_mat_to_df, open_data, save_model, save_textfile
 
 
 def add_metadata_to_tfidf_mat(matrix, metadata, features):
@@ -95,6 +96,9 @@ if __name__ == "__main__":
     data = open_data()
 
     vectorizer, matrix = vectorize_articles(data[TEXT_COL])
+
+    save_model(vectorizer, 'mbti_tfidf_{}'.format(TFIDF_MAX_FEATURES))
+
     features = vectorizer.get_feature_names()
     save_textfile(features)
 
