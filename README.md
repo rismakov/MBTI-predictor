@@ -43,7 +43,7 @@ The data set was mostly skewed towards 'IN's and 'EN's, with very few 'ES's in t
 Plotted below is the distribution of the types with the data set (first plot) compared to the global population distribution (second plot). The third plot shows the difference between the real percent the types appear in the world and the percent they appear in our data set. As you can see, 'IN's are vastly overrepresented in the data. 'ES's and 'IS's, by contrast, while the most common types, are underrepresented within the data.
 <br><br>
 
-<img src="static\images\mbti\type_distributions.png" width="40%" height="40%"/>
+<img src="graphs\type_distributions.png" width="40%" height="40%"/>
 <br>
 
 I considered whether to perform oversampling on the classes to get a more representative blend. In the end I decided to keep the training data as is, with the assumption that the people who will be interacting with a MBTI personality predicter app will most likely resemble the data set distribution as opposed to the real world distribution. <br><br>
@@ -88,5 +88,5 @@ The types tend to use different types of words with more frequency. Doing a TFID
 
 <br><br> Plotted below are the top TFIDF words used by each type as compared to all the rest of the types. As you can see, 'INF' types tend to use words like 'dreams', 'heart', 'soul', 'sad', while 'INT' and 'ENT' types tend to use 'argument', 'debate', 'science', 'intelligence', as well as higher levels of swear words. 'ES' and 'IS' types tend to use words more often pertaining to physical objects and people: 'husband', 'sister', 'coffee', 'phone', etc.
 <br><br>
-<img src="static\images\mbti\top_words_for_each_type.png" width="80%" height="80%"/>
+<img src="\graphs\top_words_for_each_type.png" width="80%" height="80%"/>
 						<br>
