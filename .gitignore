@@ -6,7 +6,6 @@
 .pyc
 .cache
 
-*.png
 *.docx
 
 # All folders to ignore
