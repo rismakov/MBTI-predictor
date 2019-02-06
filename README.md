@@ -20,25 +20,25 @@ The purpose of this project is to investigate whether patterns and predictive fe
 				</div>
 				<div class="col-lg-12 text-left">
 					<br>
-					<p>
+				
 					There are a few issues with the current method of extracting a person's personality type. Self-reports tend to be unreliable for several reasons:</p>
 
 					<ol>
-						<li> <p>Most people can guess what personality function a question relates too (ie. We tend to be aware that the question "Do you prefer to stay in and read a book instead of going out to a party" refers to Extroversion/Introversion), and may choose to answer based on how they prefer to identify themselves as opposed to directly answering the question. This injects bias into how we choose to respond to the questions. </p></li>
+						<li> Most people can guess what personality function a question relates too (ie. We tend to be aware that the question "Do you prefer to stay in and read a book instead of going out to a party" refers to Extroversion/Introversion), and may choose to answer based on how they prefer to identify themselves as opposed to directly answering the question. This injects bias into how we choose to respond to the questions. </p></li>
 
-						<li> <p>In many cases we don't have a strong preference for one way or the other, or we may vary depending on our mood or other contextual information that is not present in the question. This injects unreliability in how we choose to answer and may shift results when we retake the test.</p></li>
+						<li> In many cases we don't have a strong preference for one way or the other, or we may vary depending on our mood or other contextual information that is not present in the question. This injects unreliability in how we choose to answer and may shift results when we retake the test.</p></li>
 
-						<li> <p>The tests improve with the addition of extra questions. However, answering so many questions may be tiring for users.</p></li>
+						<li> The tests improve with the addition of extra questions. However, answering so many questions may be tiring for users.</p></li>
 					</ol><br>
 
-					<p>Given these limitations, using social media text might provide a more seamless and reliable method of extracting personality type. Below I will explain how I set out to acheive this.
+					Given these limitations, using social media text might provide a more seamless and reliable method of extracting personality type. Below I will explain how I set out to acheive this.
 					</p>
 
 <h2>About MBTI data set</h2>
 					</div>
 				</div>
 				<div class="col-lg-12 text-left">
-				<p>
+				
 					<br>
 					The data consisted of around ~8600 datapoints, gathered from personalitycafe.com, a forum used for discussing various topics pertaining to personality. Each row consisted of the users self-reported MBTI type and approximately 50 posts for each user in the set.
 					<br><br>
@@ -56,18 +56,14 @@ The purpose of this project is to investigate whether patterns and predictive fe
 				<div align="center"><img src="static\images\mbti\type_distributions.png" width="40%" height="40%"/></div>
 				<br>
 
-				<p>I considered whether to perform oversampling on the classes to get a more representative blend. In the end I decided to keep the training data as is, with the assumption that the people who will be interacting with a MBTI personality predicter app will most likely resemble the data set distribution as opposed to the real world distribution. <br><br>
+I considered whether to perform oversampling on the classes to get a more representative blend. In the end I decided to keep the training data as is, with the assumption that the people who will be interacting with a MBTI personality predicter app will most likely resemble the data set distribution as opposed to the real world distribution. <br><br>
 
 					In order to compare properly, I created two Baseline Models: one that randomly predicted with the same probabilities as the distribution of the types in the set, and the second which always chose the majority class (INFP in this case). This allowed me to compare the model predictions to baseline models that similarily took the unbalanced labels into account.
 
 					<br>
           
           <h2>Feature engineering</h2>
-					</div>
-				</div>
-				<div class="col-lg-12 text-left">
 
-					<p>
 						<br>
 
 						Particular writing styles have been found to be assocaited with certain personality traits. Moreso, aside from looking purely at word usage, it has been shown that the way the author expresses his or her thoughts is able to reveal character to an even greater degree.
@@ -80,38 +76,33 @@ The purpose of this project is to investigate whether patterns and predictive fe
 					</p>
 
 					<ul>
-						<li><p><p> average word length</p></li>
-						<li><p> average length of post</p></li>
-						<li><p> average sentence length</p></li>
-						<li><p> sentence length variability</p></li>
-						<li><p> polarity </p></li>
-						<li><p> subjectivity </p></li>
-						<li><p> level of formatlity </p></li>
-						<li><p> word diversity</p></li>
-						<li><p> different parts of speech usage</p></li>
-						<li><p> frequency of using curse words</p></li>
-						<li><p> frequency of certain types of words (sad words, happy words, etc)</p></li>
-						<li><p> sentence capitalization</p></li>
-						<li><p> use of ALL CAPS </p></li>
-						<li><p> etc. ...</p></li>
+						<li> average word length</p></li>
+						<li> average length of post</p></li>
+						<li> average sentence length</p></li>
+						<li> sentence length variability</p></li>
+						<li> polarity </p></li>
+						<li> subjectivity </p></li>
+						<li> level of formatlity </p></li>
+						<li> word diversity</p></li>
+						<li> different parts of speech usage</p></li>
+						<li> frequency of using curse words</p></li>
+						<li> frequency of certain types of words (sad words, happy words, etc)</p></li>
+						<li> sentence capitalization</p></li>
+						<li> use of ALL CAPS </p></li>
+						<li> etc. ...</p></li>
 					</ul>
 
-					<p>
 						For full list, view code at: github.com/rismakov/MBTI_predictor.
 						<br><br>
 						In addition to extracting stylistic features, I performed TFIDF on the data. (TFIDF is a measure for scoring words: in short, words that words that appear often in a single document, but very rarely in other documents are scored higher).
-					</p>
 
 <h2>Type Word Usage Differences</h2>
-							</div>
-						</div>
-						<div class="col-lg-12 text-left">
-						<p>
+				
 							<br>
 							The types tend to use different types of words with more frequency. Doing a TFIDF analysis, which observes how often a word is used in a specific text normalized to the times it's used in general among all the texts available, I investigated which words were used most often by which type.
 
 							<br><br> Plotted below are the top TFIDF words used by each type as compared to all the rest of the types. As you can see, 'INF' types tend to use words like 'dreams', 'heart', 'soul', 'sad', while 'INT' and 'ENT' types tend to use 'argument', 'debate', 'science', 'intelligence', as well as higher levels of swear words. 'ES' and 'IS' types tend to use words more often pertaining to physical objects and people: 'husband', 'sister', 'coffee', 'phone', etc.
 							<br><br>
 						</p>
-						<div align="center"><img src="static\images\mbti\top_words_for_each_type.png" width="80%" height="80%"/></div>
+						<img src="static\images\mbti\top_words_for_each_type.png" width="80%" height="80%"/></div>
 						<br>
