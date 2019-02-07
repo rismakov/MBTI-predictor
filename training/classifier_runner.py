@@ -10,6 +10,7 @@ from sklearn.model_selection import cross_validate, GridSearchCV
 from metrics_table import print_results_in_table
 from scoring import get_comprehensive_scoring_types
 from utils.constants import MODEL_FILENAME
+from utils.utils import save_model
 
 CAPITAL_LETTERS = 'ABCDEFGFIGKLMNOPQRSTUVWXYZ'
 
