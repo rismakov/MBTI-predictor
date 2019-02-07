@@ -1,11 +1,7 @@
 from __future__ import division, print_function
 
-import cPickle
-import matplotlib.pyplot as plt
 import numpy as np
-
-# import plotly.plotly as py
-# import plotly.graph_objs as go
+import pickle
 
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import auc, roc_curve
@@ -13,6 +9,7 @@ from sklearn.model_selection import cross_validate, GridSearchCV
 
 from metrics_table import print_results_in_table
 from scoring import get_comprehensive_scoring_types
+from utils.constants import MODEL_FILENAME
 
 CAPITAL_LETTERS = 'ABCDEFGFIGKLMNOPQRSTUVWXYZ'
 
@@ -38,14 +35,17 @@ class Classifiers(object):
 
         return ''.join([letter for letter in clf_name if letter in CAPITAL_LETTERS])
 
-    def fit_all_clfs(self, save_model=False):
+    def fit_all_clfs(self):
         for clf, name in zip(self.classifiers, self.classifier_names):
             print("\n____________{}____________".format(name))
             clf.fit(self._X_train, self._y_train)
 
-            if save_model:
-                with open('Fitted_Model_{}_Style'.format(name), 'wb') as f:
-                    cPickle.dump(clf, f)
+    def fit_final_clfs(self, X, y):
+        for clf, name in zip(self.classifiers, self.classifier_names):
+            print("\n____________{}____________".format(name))
+            clf.fit(X, y)
+
+            save_model(MODEL_FILENAME.format(name))
 
     def grid_search(self, params_dict):
         for clf, params in zip(self.classifiers, params_dict):
