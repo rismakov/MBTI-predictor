@@ -3,6 +3,7 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 from constants import COLORS, COLOR_INCREASE, LETTER_TYPES
+from plotting.plotting_utils import plot_table, save_fig
 from utils.constants import MODEL_COMPARISON_TABLE_FILE
 
 
@@ -31,5 +32,4 @@ def print_results_in_table(metrics, clfs, clf_names):
         cell_colors[metric_ind][clf_ind] = COLOR_INCREASE[current_color]
 
     plot_table(cell_text, scoring_types, clf_names, cell_colors=cell_colors)
-
     save_fig(MODEL_COMPARISON_TABLE_FILE)

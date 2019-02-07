@@ -11,7 +11,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import auc, roc_curve
 from sklearn.model_selection import cross_validate, GridSearchCV
 
-from plot_table import print_results_in_table
+from metrics_table import print_results_in_table
 from scoring import get_comprehensive_scoring_types
 
 CAPITAL_LETTERS = 'ABCDEFGFIGKLMNOPQRSTUVWXYZ'
@@ -106,4 +106,4 @@ class Classifiers(object):
             mean_cross_val_metrics[name] = {k: np.mean(v) for k, v in cross_val_metrics.items() if 'test' in k}
 
         print(mean_cross_val_metrics)
-        # print_results_in_table(mean_cross_val_metrics, self.classifiers, self.classifier_names)
+        print_results_in_table(mean_cross_val_metrics, self.classifiers, self.classifier_names)
