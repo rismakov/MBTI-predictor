@@ -3,10 +3,9 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 from constants import COLORS, COLOR_INCREASE, LETTER_TYPES
-from utils.constants import MODEL_COMPARISON_TABLE_FILE
+from plotting.plotting_utils import plot_table, save_fig
 
-
-def print_results_in_table(metrics, clfs, clf_names):
+def print_results_in_table(metrics, clfs, clf_names, filename):
     fig, ax = plt.subplots()
 
     all_ordered_keys = []
@@ -32,4 +31,4 @@ def print_results_in_table(metrics, clfs, clf_names):
 
     plot_table(cell_text, scoring_types, clf_names, cell_colors=cell_colors)
 
-    save_fig(MODEL_COMPARISON_TABLE_FILE)
+    save_fig(filename)
