@@ -1,5 +1,6 @@
 from __future__ import division, print_function
 
+import logging
 import numpy as np
 import pandas as pd
 import time
@@ -24,7 +25,7 @@ def debug(data):
     '''
     stylometry_info = []
     for i, row in data.iterrows():
-        print(i)
+        logging.info(f"Featurizing row {i}.")
         stylometry_info += StyleFeatures(row[TEXT_COL]).get_all_featurized_features()
 
 
@@ -39,15 +40,19 @@ def add_stylometry_info(data):
 
 
 def parallelize_dataframe(df, func):
-    print('Spliting data.')
+    logging.info('Spliting data...')
     df_split = np.array_split(df, num_partitions)
-    print('Pooling data.')
+    
+    logging.info('Pooling data...')
     pool = Pool(num_cores)
-    print('Concatenating data.')
+    
+    logging.info('Concatenating data...')
     df = pd.concat(pool.map(func, df_split))
     pool.close()
-    print('Joining data.')
+    
+    logging.info('Joining data...')
     pool.join()
+    
     return df
 
 
@@ -78,7 +83,6 @@ def featurize_data(debug=False):
         data = parallelize_dataframe(data, add_stylometry_info)
 
     data = convert_fields_to_columns(data)
-    print(data.columns)
     data.to_csv(FEATURIZED_PATH, encoding='utf-8')
 
 
@@ -89,4 +93,4 @@ if __name__ == "__main__":
 
     seconds = time.time() - start_time
     minutes = seconds / 60
-    print("Featurizer took", minutes, "minutes to run")
+    logging.info(f"Featurizer took {minutes} minutes to run.")
