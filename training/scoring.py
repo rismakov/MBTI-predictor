@@ -23,22 +23,18 @@ def get_multiclass_metrics(true, pred):
     return metrics
 
 
-def scorer_func_for_each_letter(
-    true, pred, dim, scoring_type, average_types=['macro']
-):
+def scorer_func_for_each_letter(true, pred, dim, dim_i, scoring_type):
     '''Returns score from scoring function given personality dimension and scoring type.
     '''
-    metrics = {}
-    for i, dim in enumerate(PERSONALITY_DIMS):
-        true_dim = [x[i]for x in true]
-        pred_dim = [x[i]for x in pred]
+    true_dim = [x[dim_i]for x in true]
+    pred_dim = [x[dim_i]for x in pred]
 
-        metrics[dim] = get_multiclass_metrics(true_dim, pred_dim)
+    metrics = get_multiclass_metrics(true_dim, pred_dim)
 
-    return metrics[dim][scoring_type]
+    return metrics[scoring_type]
 
 
-def get_metrics_for_letter_type(scoring, dim, letter_type):
+def get_metrics_for_letter_type(scoring, dim, dim_i, letter_type):
     '''Iterates through every scoring_type to grab result from scoring function.
     '''
     scoring_types = ['accuracy', 'precision', 'recall', 'f1']
@@ -46,7 +42,10 @@ def get_metrics_for_letter_type(scoring, dim, letter_type):
     for scoring_type in scoring_types:
         key_name = letter_type + '_' + scoring_type
         scoring[key_name] = make_scorer(
-            scorer_func_for_each_letter, dim=dim, scoring_type=scoring_type, greater_is_better=True
+            scorer_func_for_each_letter, 
+            dim=dim, dim_i=dim_i, 
+            scoring_type=scoring_type, 
+            greater_is_better=True
         )
 
     return scoring
@@ -64,6 +63,7 @@ def get_comprehensive_scoring_types():
 
     # add metrics for each letter type (i.e. E-I, N-S, F-T, J-P) to full type metrics
     for dim, letter_type in zip(PERSONALITY_DIMS, LETTER_TYPES):
-        scoring = get_metrics_for_letter_type(scoring, dim, letter_type)
+        dim_i = PERSONALITY_DIMS.index(dim)
+        scoring = get_metrics_for_letter_type(scoring, dim, dim_i, letter_type)
 
     return scoring
