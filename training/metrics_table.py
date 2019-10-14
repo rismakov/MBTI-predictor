@@ -9,9 +9,9 @@ def print_results_in_table(metrics, clfs, clf_names, filename):
     fig, ax = plt.subplots()
 
     all_ordered_keys = []
-    for letter_type in [''] + [letter + '_' for letter in LETTER_TYPES]:
+    for letter_type in [''] + [LETTER_TYPES]:
         for scoring_type in ['accuracy', 'precision', 'recall', 'f1']:
-            all_ordered_keys.append('test_' + letter_type + scoring_type)
+            all_ordered_keys.append('_'.join(['test', letter_type, scoring_type)
 
     scoring_types = all_ordered_keys
 

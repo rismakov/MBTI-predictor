@@ -25,8 +25,10 @@ def debug(data):
     '''
     stylometry_info = []
     for i, row in data.iterrows():
-        logging.info(f"Featurizing row {i}.")
-        stylometry_info += StyleFeatures(row[TEXT_COL]).get_all_featurized_features()
+        logging.info("Featurizing row {}".format(i))
+        stylometry_info += StyleFeatures(
+            row[TEXT_COL]
+        ).get_all_featurized_features()
 
 
 def add_stylometry_info(data):
@@ -35,7 +37,10 @@ def add_stylometry_info(data):
     :param data type: Pandas DataFrame.
     :returns type: Pandas DataFrame with additional 'stylometry' column.
     '''
-    data['stylometry'] = data[TEXT_COL].apply(lambda x: StyleFeatures(x).get_all_featurized_features())
+    data['stylometry'] = data[
+        TEXT_COL
+    ].apply(lambda x: StyleFeatures(x).get_all_featurized_features())
+    
     return data
 
 
@@ -57,17 +62,21 @@ def parallelize_dataframe(df, func):
 
 
 def convert_fields_to_columns(data):
-    '''Converts 'stylometry' column with dictionary type into separate columns with each dict field a separate column.
+    '''Converts 'stylometry' column with dictionary type into separate columns 
+    with each dict field a separate column.
 
     :param data type: Pandas DataFrame with 'stylometry' column available.
-    :returns type: Pandas DataFrame with additional columns, dropping 'stylometry' column.
+    :returns type: Pandas DataFrame with additional columns, dropping 
+    'stylometry' column.
     '''
     features = data[FEATURES_COL][0]
     for feature in features:
         feature_col = [d[feature] for d in data[FEATURES_COL]]
 
         if all(value == 0.0 for value in feature_col):
-            raise Exception('Feature {} added with all zero values'.format(feature))
+            raise Exception(
+                'Feature {} added with all zero values'.format(feature)
+            )
 
         data[feature] = feature_col
 
@@ -93,4 +102,4 @@ if __name__ == "__main__":
 
     seconds = time.time() - start_time
     minutes = seconds / 60
-    logging.info(f"Featurizer took {minutes} minutes to run.")
+    logging.info("Featurizer took {} minutes to run".format(minutes))

@@ -1,20 +1,28 @@
-import numpy as np
+from __future__ import division
+
+import logging
 from random import choice
+
+import numpy as np
 
 
 class BaselineClassifier(object):
-    '''Classifier that randomly predicts label. Takes into account the probability of getting each label.
+    '''Classifier that randomly predicts label based on probability of getting each label.
     '''
+    
     def __init__(self):
         self.name = 'Baseline'
 
     def fit(self, X, y):
+        logging.info(
+            'Fitting {} labels for {} classifier'.format(len(y), self.name)
+        )
+
         self._X = X
         self._values = list(set(y))
+        logging.info('{} unique label values'.format(len(self._values)))
 
-        y_len = len(y)
-        y_list = list(y)
-        self._p = [y_list.count(value) / y_len for value in self._values]
+        self._p = [list(y).count(value) / len(y) for value in self._values]
 
     def predict(self, X):
         return np.random.choice(self._values, X.shape[0], p=self._p)
@@ -26,6 +34,7 @@ class BaselineClassifier(object):
 class MajorityBaselineClassifier(object):
     '''Classifier that predicts majority class every time.
     '''
+    
     def __init__(self):
         self.name = 'MajorityBaseline'
 
@@ -39,6 +48,10 @@ class MajorityBaselineClassifier(object):
         return cnts[max(cnts)]
 
     def fit(self, X, y):
+        logging.info(
+            'Fitting {} labels for {} classifier'.format(len(y), self.name)
+        )
+
         self._y_sample = y
         self._majority_class = self.get_majority_class()
 

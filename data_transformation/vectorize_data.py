@@ -1,7 +1,9 @@
 from __future__ import print_function
 
+import logging
 import numpy as np
 import pandas as pd
+import pickle
 import time
 
 from nltk.corpus import stopwords
@@ -19,7 +21,7 @@ def add_metadata_to_tfidf_mat(matrix, metadata, features):
 
 def vectorize_articles(corpus):
     stop_words = stopwords.words('english') + WORDS_TO_REMOVE_TFIDF
-    vectorizer = TfidfVectorizer(max_features=1000, stop_words=stop_words)
+    vectorizer = TfidfVectorizer(max_features=TFIDF_MAX_FEATURES, stop_words=stop_words)
     matrix = vectorizer.fit_transform(corpus)
 
     return vectorizer, matrix
@@ -90,9 +92,7 @@ def top_features_by_class_v2(matrix, y, features, min_tfidf=0.1, top_n=25):
     return dfs
 
 
-if __name__ == "__main__":
-    start_time = time.time()
-
+def main():
     data = open_data()
 
     vectorizer, matrix = vectorize_articles(data[TEXT_COL])
@@ -105,17 +105,12 @@ if __name__ == "__main__":
     df = convert_sparse_mat_to_df(matrix, features)
     df.to_csv(VECTORIZED_PATH, encoding='utf-8')
 
+
+if __name__ == "__main__":
+    start_time = time.time()
+
+    main()
+
     seconds = time.time() - start_time
     minutes = seconds / 60
-    print("Vectorizer took", minutes, "minutes to run")
-
-    # print top used words:
-    # dfs = top_features_by_class_v2(matrix2, y, features, min_tfidf=0.0, top_n=10)
-    # plot_tfidf_top_words_table(dfs[:8])
-
-    # print(top_mean_features(matrix, features, min_tfidf=0.0, top_n=35))
-
-    # print top features of each class:
-    #
-    # dfs = top_features_by_class_v2(matrix, y, features, min_tfidf=0.0, top_n=10)
-    # plot_tfidf_classfeats_h(dfs)
+    logging.info("Vectorizer took {} minutes to run".format(minutes))
