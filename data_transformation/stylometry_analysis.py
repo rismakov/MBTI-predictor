@@ -5,17 +5,20 @@ import numpy as np
 from string import punctuation
 from textblob import TextBlob
 
-from data_transformation.constants import IMAGE_TERMS, MBTI_TYPES_UPPER
+from data_transformation.constants import IMAGE_TERMS
 from data_transformation.stylometry_constants import (
     freq_punctuation_per_sentence, freq_punctuation_per_word, freq_token_types_per_word, INVALID_URLS, LINK_TYPES
 )
+from utils.constants import MBTI_TYPES
 from utils.utils import (
     get_count_of_characters_in_text, get_freq_of_characters_in_text_in_list, get_freq_of_items_in_list
 )
 
 
 class StyleFeatures(object):
-    '''Retrieves features of writing style. This includes frequency of certain tokens, frequency of various punctuation
+    '''Retrieves features of writing style. 
+    
+    This includes frequency of certain tokens, frequency of various punctuation
     marks, subjectivity/polarity of the text, etc.
     '''
 
@@ -178,18 +181,20 @@ class StyleFeatures(object):
     def add_frequency_of_emojis_and_emoticons_to_stylometry_markers(self):
         # NOTE: .sentences removes ellipses that come at the end of sentences. fix this.
         self.stylometry_markers['ellipses_per_sentence'] = (
-            get_count_of_characters_in_text(self.posts_removing_links, '...') / self.num_of_sentences
+            get_count_of_characters_in_text(
+                self.posts_removing_links, '...'
+            ) / self.num_of_sentences
         )
 
-        self.stylometry_markers['emojis_per_sentence'] = (
-            sum([self.is_emoji(sentence) for sentence in self.sentences]) / self.num_of_sentences
-        )
+        self.stylometry_markers['emojis_per_sentence'] = sum(
+            [self.is_emoji(sentence) for sentence in self.sentences]
+        ) / self.num_of_sentences
 
         self.stylometry_markers['smilies_per_sentence'] = (
-            get_count_of_characters_in_text(self.posts_removing_links, ':)') +
-            get_count_of_characters_in_text(self.posts_removing_links, ':D') +
-            get_count_of_characters_in_text(self.posts_removing_links, ': )') +
-            get_count_of_characters_in_text(self.posts_removing_links, ':-)')
+            get_count_of_characters_in_text(self.posts_removing_links, ':)') 
+            + get_count_of_characters_in_text(self.posts_removing_links, ':D') 
+            + get_count_of_characters_in_text(self.posts_removing_links, ': )') 
+            + get_count_of_characters_in_text(self.posts_removing_links, ':-)')
         ) / self.num_of_sentences
 
         self.stylometry_markers['hashtags_per_sentence'] = (
@@ -202,10 +207,10 @@ class StyleFeatures(object):
 
 
     def add_capitilization_info_to_stylometry_markers(self):
-        self.stylometry_markers['all_caps_per_word'] = (sum([(word.upper() == word) and (word not in MBTI_TYPES_UPPER)
-                                                             for word in self.non_link_words])
-                                                        / self.num_of_non_link_words)
+        self.stylometry_markers['all_caps_per_word'] = sum(
+            [(word.upper() == word) and (word not in MBTI_TYPES) for word in self.non_link_words]
+        ) / self.num_of_non_link_words
 
-        self.stylometry_markers['sentence_capitalization_freq'] = sum([
-            sentence[0].upper() == sentence[0] for sentence in self.sentences
-        ]) / self.num_of_sentences
+        self.stylometry_markers['sentence_capitalization_freq'] = sum(
+            [sentence[0].upper() == sentence[0] for sentence in self.sentences]
+        ) / self.num_of_sentences

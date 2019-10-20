@@ -1,3 +1,5 @@
+from utils.constants import MBTI_TYPES_LOWER, MBTI_TYPES_PLURAL
+
 ENNEAGRAM_TERMS = [
   '1w2', '2w1', '2w3', '3w2', '3w4', '4w3', '4w5',
   '6w5', '6w7', '7w6', '7w8', '8w7', '8w9', '9w8',
@@ -7,13 +9,24 @@ ENNEAGRAM_TERMS = [
 
 FUNCTIONS = [
   'fe', 'fi', 'ne', 'ni', 'se', 'si', 'te', 'ti', 'sj', 
-  'dom', 'sensing', 'perceiving'
+  'dom', 'sensing', 'perceiving', 'extrovert', 'introvert',
 ]
 
 IMAGE_TERMS = [
-  'gif', 'giphy', 'image', 'img', 'imgur', 
-  'jpeg', 'jpg', 'JPG', 
-  'photobucket', 'php', 'png', 'tinypic'
+  'gif', 
+  'giphy', 
+  'image', 
+  'img', 
+  'imgur', 
+  'jpeg', 
+  'jpg', 
+  'JPG', 
+  'photobucket', 
+  'php',
+  'player_embedded', 
+  'png', 
+  'staticflickr', 
+  'tinypic',
 ]
 
 INVALID_WORDS = [
@@ -22,29 +35,20 @@ INVALID_WORDS = [
 ]
 
 MBTI_PARTS = [
-  'es', 'fj', 'nt', 'nf', 'st', 'sf', 'sj',
+  'es', 'fj', 'fs', 'nt', 'nf', 'st', 'sf', 'sj',
   'nts', 'nfs', 'sts', 'sfs', 'sjs',
-  'enxp', 'exfj', 'exfp', 'esxp',
+  'enxp', 'esxp', 'exfj', 'exfp', 'extp',
+  'inxj', 
   'ixfp', 'ixtp', 'ixtj', 'ixfj',
-  'xntp', 'xnfj',
-  'nfp', 'ntp', 'ntj', 'nfp', 'sfj',
+  'xnfp', 'xntp', 'xnfj', 'xnfp', 'xstj', 'xstp',
+  'nfp', 'ntp', 'ntj', 'nfp', 'sfj', 
+  'sps',
 ]
-
-MBTI_TYPES_UPPER = [
-  'ENFJ', 'ENFP', 'ENTJ', 'ENTP',
-  'ESFJ', 'ESFP', 'ESTJ', 'ESTP',
-  'INFJ', 'INFP', 'INTJ', 'INTP',
-  'ISFJ', 'ISFP', 'ISTJ', 'ISTP'
-]
-
-MBTI_TYPES_LOWER = [mbti_type.lower() for mbti_type in MBTI_TYPES_UPPER]
-
-MBTI_TYPES_PLURAL = [word + 's' for word in MBTI_TYPES_LOWER]
 
 URL_TERMS = ['http', 'https', 'www', 'com', 'youtube', 'youtu', 'watch']
 
 # combine all invalid words to remove from TFIDF vectoried matrix
-WORDS_TO_REMOVE_TFIDF = (
+STOPWORDS = (
   ENNEAGRAM_TERMS 
   + FUNCTIONS 
   + IMAGE_TERMS 

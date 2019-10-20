@@ -3,20 +3,24 @@ from __future__ import division, print_function
 import logging
 import numpy as np
 import pickle
+import matplotlib.pyplot as plt
+import seaborn as sn
 
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import auc, roc_curve
+from sklearn.metrics import auc, confusion_matrix, roc_curve
 from sklearn.model_selection import cross_validate, GridSearchCV
 
+from constants import RANDOM_STATE
 from metrics_table import print_results_in_table
+from plotting.plotting_constants import FUNCTION_INDS
+from plotting.plotting_utils import plot_table, save_fig
 from scoring import get_comprehensive_scoring_types
-from utils.constants import MODEL_FILENAME
+from utils.constants import MBTI_TYPES, MODEL_FILENAME
 from utils.utils import save_model
 
 
 class Classifiers(object):
-    '''Classifier object for fitting and comparing multiple model output.
-    '''
+    '''Classifier object for fitting and comparing multiple model output.'''
 
     def __init__(self, classifier_list, X, y):
         self.classifiers = classifier_list
@@ -24,8 +28,8 @@ class Classifiers(object):
             self.get_abbr_class_name(clf) for clf in self.classifiers
         ]
 
-        self._X_train, self._X_test, self._y_train, self._y_test = train_test_split(
-            X, y, test_size=0.30, random_state=18
+        self._X_train, self._X_test, self._y_train, self._y_test = (
+            train_test_split(X, y, test_size=0.30, random_state=RANDOM_STATE)
         )
 
         logging.info('{} labels in training set.'.format(len(self._y_train)))
@@ -44,21 +48,18 @@ class Classifiers(object):
             [letter for letter in clf_name if letter == letter.upper()]
         )
 
-    def fit_training_set(self):
+    def fit(self):
         for clf, name in zip(self.classifiers, self.classifier_names):
             print("\n______________{}______________".format(name))
             clf.fit(self._X_train, self._y_train)
 
-    def fit_final_set(self, X, y):
-        for clf, name in zip(self.classifiers, self.classifier_names):
-            print("\n______________{}______________".format(name))
-            clf.fit(X, y)
-
-            save_model(MODEL_FILENAME.format(name))
+            save_model(clf, MODEL_FILENAME.format(name))
 
     def grid_search(self, params_dict):
         for clf, params in zip(self.classifiers, params_dict):
-            print("\n______________{}______________".format(clf.estimator.__class__.__name__))
+            print("\n______________{}______________".format(
+                clf.estimator.__class__.__name__)
+            )
             gscv = GridSearchCV(clf, params, scoring='f1_macro')
             clf = gscv.fit(self._X_train, self._y_train)
             print('Best parameters:', clf.best_params_)
@@ -124,3 +125,39 @@ class Classifiers(object):
             self.classifier_names, 
             filename=filename
         )
+    
+    def plot_test_results():
+        num_clfs = len(self.classifiers)
+        for i, name, clf in zip(
+            range(num_clfs), self.classifier_names, self.classifiers
+        ):
+            plt.plot(i)
+        
+
+
+    def get_cm(self):
+        cms = {}
+        for name, clf in zip(self.classifier_names, self.classifiers):
+            predicted = clf.predict(self._X_test)
+
+            for description, inds in FUNCTION_INDS.items():
+                start_ind, end_ind = inds
+                true = [x[start_ind:end_ind]for x in self._y_test]
+                pred = [x[start_ind:end_ind]for x in predicted]
+            
+                cm = confusion_matrix(true, pred)  # labels=MBTI_TYPES
+                cm_percentage =  [x / sum(x) for x in cm]
+                # plt.imshow(cm, cmap='binary')
+            
+                #  sn.set(font_scale=1.4)  # for label size
+                plt.figure(figsize = (10,7))
+                sn.heatmap(cm, annot=True, fmt='d')  # , xticklabels=, yticklabels=)
+                plt.title(description)
+                plt.show()
+
+                plt.figure(figsize = (10,7))
+                sn.heatmap(cm_percentage, annot=True, annot_kws={"size": 10})  # , xticklabels=, yticklabels=)
+                plt.title(description)
+                plt.show()
+
+        return cms

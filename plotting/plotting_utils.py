@@ -20,16 +20,28 @@ def add_title(title, fontsize=10):
     plt.title(title, fontsize=fontsize)
 
 
-def save_fig(filename, facecolor='whitesmoke'):
+def save_fig(filename, facecolor='white'):
     plt.savefig(filename, facecolor=facecolor, bbox_inches="tight")
     plt.close()
 
 
-def plot_table(cell_text, row_labels=None, col_labels=None, cell_colors=None, row_colors=None, col_colors=None):
+def plot_table(
+    cell_text, 
+    row_labels=None, 
+    col_labels=None, 
+    cell_colors=None, 
+    row_colors=None, 
+    col_colors=None
+):
     table = plt.table(
-        cellText=cell_text, cellColours=cell_colors, cellLoc='left',
-        rowLabels=row_labels, rowColours=row_colors,
-        colLabels=col_labels, colColours=col_colors, colLoc='center',
+        cellText=cell_text,
+        cellColours=cell_colors, 
+        cellLoc='left',
+        rowLabels=row_labels, 
+        rowColours=row_colors,
+        colLabels=col_labels, 
+        colColours=col_colors, 
+        colLoc='center',
         loc='center'
     )
 

@@ -1,9 +1,10 @@
 from __future__ import division, print_function
 
 import logging
+import time
+
 import numpy as np
 import pandas as pd
-import time
 
 from multiprocessing import Pool
 
@@ -11,6 +12,7 @@ from stylometry_analysis import StyleFeatures
 from utils.constants import FEATURIZED_PATH, LABEL_COL, TEXT_COL
 from utils.utils import open_data
 
+logging.getLogger().setLevel(logging.INFO)
 
 FEATURES_COL = 'stylometry'
 

@@ -1,9 +1,13 @@
 from __future__ import division
 
+import numpy as np
 import unittest
 
-from stylometry_analysis import StyleFeatures
-from utils.utils import get_freq_of_characters_in_text_in_list, get_freq_of_items_in_list, get_count_of_characters_in_text
+from data_transformation.stylometry_analysis import StyleFeatures
+from plotting.plotting import get_all_distributions, get_letter_distributions_from_type_distribution
+from utils.utils import (
+    get_freq_of_characters_in_text_in_list, get_freq_of_items_in_list, get_count_of_characters_in_text,
+    get_key_of_dict_by_value, get_top_inds)
 
 text = (
     "http://www.youtube.com/watch?v=qsXHcwe3krw|||http://41.media.tumblr.com/tumblr_lfouy03PMA1qa1rooo1_500.jpg|||enfp"
@@ -173,9 +177,9 @@ expected_links = [
 ]
 
 class StyleFeaturesTests(unittest.TestCase):
-    def test_add_periods_to_end_of_posts_if_punct_missing(self):
+    def test_get_posts_with_periods_at_ends(self):
         style_text = StyleFeatures(text)
-        result = style_text.add_periods_to_end_of_posts_if_punct_missing()
+        result = style_text.get_posts_with_periods_at_ends()
 
         self.assertEqual(len(result), len(text_with_punctuation_where_missing))
         self.assertEqual(result, text_with_punctuation_where_missing)
@@ -298,14 +302,6 @@ class StyleFeaturesTests(unittest.TestCase):
         self.assertEqual(style_text.stylometry_markers['.gif_per_post'], expected_gifs)
         self.assertEqual(style_text.stylometry_markers['images_per_post'], expected_images)
 
-    def test_get_count_smilie_per_word(self):
-        example = 'Hi :) How are you?:) I am good:) :-)'
-        example2 = 'Hi :D How are you?:) I am good:D'
-        example3 = 'Hi :) How are you?:-) I am good:)'
-
-        self.assertEqual(StyleFeatures.get_count_smilie_per_word(example, ':)'), 3)
-        self.assertEqual(StyleFeatures.get_count_smilie_per_word(example2, ':D'), 2)
-        self.assertEqual(StyleFeatures.get_count_smilie_per_word(example3, ':-)'), 1)
 
 class UtilitiesTests(unittest.TestCase):
     def test_get_freq_of_characters_in_text_in_list(self):
@@ -332,6 +328,65 @@ class UtilitiesTests(unittest.TestCase):
 
         expected_result = 2
         result = get_count_of_characters_in_text(text, characters)
+        self.assertEqual(expected_result, result)
+
+        example = 'Hi :) How are you?:) I am good:) :-)'
+        example2 = 'Hi :D How are you?:) I am good:D'
+        example3 = 'Hi :) How are you?:-) I am good:)'
+
+        self.assertEqual(get_count_of_characters_in_text(example, ':)'), 3)
+        self.assertEqual(get_count_of_characters_in_text(example2, ':D'), 2)
+        self.assertEqual(get_count_of_characters_in_text(example3, ':-)'), 1)
+
+    def test_get_key_of_dict_by_value(self):
+        my_dict = {'cat': 15, 'dog': 20, 'mouse': 11}
+        value = 20
+        result = get_key_of_dict_by_value(my_dict, value)
+        self.assertEqual('dog', result)
+
+        my_dict = {'cat': 15, 'dog': 20, 'mouse': 11, 'monkey': 1, 'elephant': 3}
+        value = 1
+        result = get_key_of_dict_by_value(my_dict, value)
+        self.assertEqual('monkey', result)
+
+    def test_get_top_inds(self):
+        example = [3, 40, 2, 4, 9, 10, 5, 8, 20]
+        expected_result = np.array([1, 8, 5, 4, 7])
+        result = get_top_inds(example, top_n=5)
+
+        self.assertEqual(all(expected_result == result), True)
+
+class PlottingTests(unittest.TestCase):
+    def test_get_all_distributions(self):
+        data_ex = {'cat': 0.5, 'dog': 0.25, 'monkey': 0.25}
+        global_ex = {'cat': 0.5, 'dog': 0.4, 'monkey': 0.1}
+        result = get_all_distributions(data_ex, global_ex)
+
+        self.assertDictEqual({'cat': 0.0, 'dog': -0.15, 'monkey': 0.15}, result['distribution difference'])
+
+
+    def test_get_letter_distributions_from_type_distribution(self):
+        example = {
+            'ESTP': 1.03, 'ISTP': 3.88, 'ESFP': 0.55, 'ISFP': 3.12,
+            'ENTP': 7.9, 'ENFJ': 2.19, 'INTP': 15.03, 'ISFJ': 1.91,
+            'ENTJ': 2.66, 'ISTJ': 2.36, 'ESFJ': 0.48, 'ESTJ': 0.45,
+            'INTJ': 12.58, 'INFP': 21.12, 'ENFP': 7.78, 'INFJ': 16.95
+        }
+
+        expected_result = {
+            'E': round(1.03 + 0.55 + 7.9 + 2.19 + 2.66 + 0.48 + 0.45 + 7.78, 2),
+            'I': round(3.88 + 3.12 + 15.03 + 1.91 + 2.36 + 12.58 + 21.12 + 16.95, 2),
+            'N': round(7.9 + 2.19 + 15.03 + 2.66 + 12.58 + 21.12 + 7.78 + 16.95, 2),
+            'S': round(1.03 + 3.88 + 0.55 + 3.12 + 1.91 + 2.36 + 0.48 + 0.45, 2),
+            'F': round(0.55 + 3.12 + 2.19 + 1.91 + 0.48 + 21.12 + 7.78 + 16.95, 2),
+            'T': round(1.03 + 3.88 + 7.9 + 15.03 + 2.66 + 2.36 + 0.45 + 12.58, 2),
+            'J': round(2.19  + 1.91 + 2.66+ 2.36 + 0.48 + 0.45 + 12.58 + 16.95, 2),
+            'P': round(1.03 + 3.88 + 0.55 + 3.12 + 7.9 + 15.03 + 21.12 + 7.78, 2)
+        }
+
+        result = get_letter_distributions_from_type_distribution(example)
+
+        print(result)
         self.assertEqual(expected_result, result)
 
 if __name__ == '__main__':
