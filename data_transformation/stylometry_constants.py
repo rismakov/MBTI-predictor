@@ -43,32 +43,3 @@ freq_token_types_per_word = {
     'offensive_per_word': {'offensive', 'offend', 'offended'},
     'racist_per_word': {'racist', 'bigot', 'homophobe', 'homophobic', 'transphobic', 'sexist', 'ableist'}
 }
-
-freq_tokens_per_word = {
-    'howevers_per_word': ['however'],
-    'ifs_per_word': ['if'],
-    'thats_per_word': ['that'],
-    'mores_per_word': ['more'],
-    'verys_per_word': ['very'],
-    'reallys_per_word': ['really'],
-    'facts_per_word': ['fact'],
-    'think_per_word': ['think'],
-    'thinking_per_word': {'thinking'},
-    'feel_per_word': ['feel'],
-    'feeling_per_word': ['feeling'],
-    'believe_per_word': ['believe'],
-    'know_per_word': ['know'],
-    'party_per_word': ['party'],
-    'logic_per_word': ['logic'],
-    'left_terms_per_word': ['democrat', 'liberal', 'leftist', 'lefties'],
-    'right_terms_per_word': ['republican', 'conservative', 'rightist'],
-    'libertarian_per_word': ['libertarian'],
-    'authorirarian_per_word': ['authoritarian'],
-    'music_per_word': ['music'],
-    'sorrys_per_word': ['sorry'],
-    'meaning_per_word': {'meaning', 'purpose'},
-    'love_per_word': {'love'},
-    'people_per_word': {'people'},
-    'agree_per_word': {'agree'},
-    'disagree_per_word': {'disagree'}
-}
