@@ -3,7 +3,6 @@ from __future__ import print_function
 import logging
 import numpy as np
 import pandas as pd
-import pickle
 import time
 
 from nltk.corpus import stopwords
@@ -11,7 +10,12 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 
 from data_transformation.constants import STOPWORDS
 from utils.constants import VECTORIZED_PATH, TEXT_COL, TFIDF_MAX_FEATURES
-from utils.utils import convert_sparse_mat_to_df, open_data, save_model, save_textfile
+from utils.utils import (
+    convert_sparse_mat_to_df, 
+    open_data, 
+    save_model, 
+    save_textfile
+)
 
 logging.getLogger().setLevel(logging.INFO)
 
