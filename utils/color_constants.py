@@ -1,12 +1,12 @@
 from collections import OrderedDict
 
-from constants import MBTI_TYPES
+from utils.constants import MBTI_TYPES
 
 # ----------------------------------
 # model comparison table -----------
 # ----------------------------------
 
-COLORS = [
+colors = [
     'salmon', 
     'mediumaquamarine',
     'orange',
@@ -15,7 +15,7 @@ COLORS = [
 ]
 
 TABLE_COLORS = []
-for color in COLORS:
+for color in colors:
     TABLE_COLORS += [color] * 4
 
 COLOR_INCREASE = {
@@ -53,22 +53,3 @@ LETTER_COLOR_MAPPINGS = OrderedDict([
 ])
 
 LETTER_PLOT_COLORS = LETTER_COLOR_MAPPINGS.values()
-
-# ----------------------------------
-# zodiac plot ----------------------
-# ----------------------------------
-
-ZODIAC_PLOT_COLORS = [
-    'salmon',
-    'yellowgreen',
-    'darkorange',
-    'olivedrab',
-    'darkcyan',
-    'mediumseagreen',
-    'gray',
-    'cornflowerblue',
-    'maroon',
-    'rebeccapurple',
-    'dodgerblue',
-    'darkseagreen',
-]
