@@ -1,10 +1,17 @@
 from __future__ import division, print_function
 
-import pandas as pd
+import logging
 import time
 
-from sklearn.ensemble import AdaBoostClassifier, RandomForestClassifier, GradientBoostingClassifier
-from sklearn.linear_model import LogisticRegression
+import numpy as np
+import pandas as pd
+
+from sklearn.ensemble import (
+    AdaBoostClassifier, 
+    RandomForestClassifier, 
+    GradientBoostingClassifier,
+)
+from sklearn.linear_model import LogisticRegression, SGDRegressor
 from sklearn.multiclass import OneVsRestClassifier
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.neural_network import MLPClassifier
