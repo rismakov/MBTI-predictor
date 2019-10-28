@@ -1,7 +1,9 @@
-from sklearn.metrics import (accuracy_score, f1_score,
-                             make_scorer, precision_score, recall_score)
+from sklearn.metrics import (
+    accuracy_score, f1_score, make_scorer, precision_score, recall_score
+)
 
 from constants import LETTER_TYPES, PERSONALITY_DIMS
+from utils.constants import FUNCTION_INDS
 
 AVERAGE_TYPE = 'macro'
 
