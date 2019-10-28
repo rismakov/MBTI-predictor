@@ -41,11 +41,10 @@ class MajorityBaselineClassifier(object):
     def get_majority_class(self):
         '''Returns the label that appears most frequently in y.
         '''
-        cnts = {}
-        for label in self._y_sample.unique():
-            cnt = list(self._y_sample).count(label)
-            cnts[cnt] = label
-        return cnts[max(cnts)]
+        labels, counts = np.unique(self._y_sample, return_counts=True)
+        max_count_ind = list(counts).index(max(counts))
+
+        return labels[max_count_ind]
 
     def fit(self, X, y):
         logging.info(
