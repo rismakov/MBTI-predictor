@@ -14,7 +14,7 @@ FUNCTION_PLOTS_PATH = 'plots/plots_by_functions'
 TEXT_COL = 'posts'
 LABEL_COL = 'type'
 
-MBTI_TYPES = [
+LABELS = [
   'ENFJ', 
   'ENFP', 
   'ENTJ', 
@@ -33,6 +33,6 @@ MBTI_TYPES = [
   'ISTP'
 ]
 
-MBTI_TYPES_LOWER = [mbti_type.lower() for mbti_type in MBTI_TYPES]
+LABELS_LOWER = [mbti_type.lower() for mbti_type in LABELS]
 
-MBTI_TYPES_PLURAL = [word + 's' for word in MBTI_TYPES_LOWER]
+LABELS_PLURAL = [word + 's' for word in LABELS_LOWER]

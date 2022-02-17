@@ -13,7 +13,7 @@ from data_transformation.stylometry_constants import (
     INVALID_URLS, 
     LINK_TYPES
 )
-from utils.constants import MBTI_TYPES
+from utils.constants import LABELS
 from utils.utils import (
     get_count_of_characters_in_text, 
     get_freq_of_characters_in_text_in_list, 
@@ -242,7 +242,7 @@ class StyleFeatures(object):
 
     def add_capitilization_info_to_stylometry_markers(self):
         self.stylometry_markers['all_caps_per_word'] = sum(
-            (word.upper() == word) and (word not in MBTI_TYPES) 
+            (word.upper() == word) and (word not in LABELS) 
             for word in self.non_link_words
         ) / self.num_of_non_link_words
 

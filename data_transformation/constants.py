@@ -1,4 +1,4 @@
-from utils.constants import MBTI_TYPES_LOWER, MBTI_TYPES_PLURAL
+from utils.constants import LABELS_LOWER, LABELS_PLURAL
 
 ENNEAGRAM_TERMS = [
   '1w2', '2w1', '2w3', '3w2', '3w4', '4w3', '4w5',
@@ -54,7 +54,7 @@ STOPWORDS = (
   + IMAGE_TERMS 
   + INVALID_WORDS 
   + MBTI_PARTS 
-  + MBTI_TYPES_LOWER 
-  + MBTI_TYPES_PLURAL 
+  + LABELS_LOWER 
+  + LABELS_PLURAL 
   + URL_TERMS
 )

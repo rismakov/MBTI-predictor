@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-from utils.constants import MBTI_TYPES
+from utils.constants import LABELS
 
 # ----------------------------------
 # model comparison table -----------
@@ -39,7 +39,7 @@ COLOR_MAPPINGS = {
     'IS': 'salmon',
 }
 
-PLOT_COLORS = [COLOR_MAPPINGS[mbti_type[:2]] for mbti_type in MBTI_TYPES]
+PLOT_COLORS = [COLOR_MAPPINGS[mbti_type[:2]] for mbti_type in LABELS]
 
 LETTER_COLOR_MAPPINGS = OrderedDict([
     ('E', 'skyblue'),
